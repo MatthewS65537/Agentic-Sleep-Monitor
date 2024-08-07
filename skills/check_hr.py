@@ -1,0 +1,17 @@
+import sys
+
+sys.path.append("../Agent Tools/Heart Rate Monitor")
+
+from HRM import HRM_Model
+from demo_monitor import *
+
+def check_HRM():
+    hr = demo_heart_rate_monitor()
+    print("DEBUG: Heart Rate:", hr)
+    model = HRM_Model()
+    model.set_data(50, 2)
+    verdict = model.agent_check_anomaly(hr)
+    return verdict
+
+if __name__ == "__main__":
+    print(check_HRM())
