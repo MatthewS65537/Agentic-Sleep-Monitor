@@ -40,3 +40,14 @@ pplxwebsonarlarge_config = {
     "api_key": os.environ["PPLX_API_KEY"]
 }
 
+xiaoai_gpt4o_config = {
+    "model": "gpt-4o",
+    "base_url" : "https://api.xiaoai.plus/v1",
+    "api_key": os.environ["XIAOAI_API_KEY"]
+}
+
+lmstudio_gemma2_2b_config = {
+    "model" : "lmstudio-community/gemma-2-2b-it-GGUF",
+    "base_url" : "http://localhost:1234/v1",
+    "api_key" : "lm-studio"
+}

@@ -25,7 +25,7 @@ music_player = AssistantAgent(
     "Music Player",
     system_message="You are a helpful assistant capable of playing music. Here is a list of the paths to all the music available:" + music_list + "Select any piece as you see fit.",
     llm_config={
-        "config_list" : [groqllama70b_config]
+        "config_list" : [groqllama8b_config]
         }
     )
 music_player.register_for_llm(name="play_music", description="Plays music.")(play_music)
@@ -38,9 +38,9 @@ from skills.check_vitals import *
 
 nurse_agent = AssistantAgent(
     "Nurse",
-    system_message="You are the nurse of a patient with sleep disorders. You are to monitor their various vitals and ensure they are in good health.",
+    system_message="You are the nurse of a patient with sleep disorders. You are to monitor their various vitals and ensure they are in good health and report these results for the doctor.",
     llm_config={
-        "config_list" : [groqllama70b_config]
+        "config_list" : [groqllama8b_config]
         }
     )
 # nurse_agent.register_for_llm(name="check_HRM", description="Checks the heart rate of the patient.")(check_HRM)
@@ -52,10 +52,18 @@ nurse_agent = AssistantAgent(
 nurse_agent.register_for_llm(name="check_vitals", description="Checks the vitals of the patient.")(check_vitals)
 user_proxy.register_for_execution(name="check_vitals")(check_vitals)
 
+doctor_agent = AssistantAgent(
+    "Doctor",
+    system_message="You are a professional sleep doctor. You are to utilize the nurse's reports on a patient's vitals to diagnose and prescribe treatment for sleep sickness. The only available information that you have are the vitals and you cannot get any treatment results until tomorrow.",
+    llm_config={
+        "config_list" : [xiaoai_gpt4o_config]
+        }
+    )
+
 groupchat = autogen.GroupChat(
-    agents=[nurse_agent, user_proxy],
+    agents=[nurse_agent, doctor_agent, user_proxy],
     messages=[],
-    max_round=50,
+    max_round=20,
     speaker_selection_method="round_robin",
     enable_clear_history=True,
 )
