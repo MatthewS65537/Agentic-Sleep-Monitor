@@ -1,1 +1,5 @@
 /music/
+/.cache/
+.DS_Store
+.gitignore
+.gitattributes
