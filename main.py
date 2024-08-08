@@ -1,6 +1,6 @@
 import sys
 sys.path.append("./Agent Tools/Heart Rate Monitor")
-sys.path.append("./Agent Tools/Apnea Monitor")
+sys.path.append("./Agent Tools/Snoring Monitor")
 sys.path.append("./Agent Tools/Movement Monitor")
 sys.path.append("./skills")
 
@@ -31,9 +31,6 @@ music_player = AssistantAgent(
 music_player.register_for_llm(name="play_music", description="Plays music.")(play_music)
 user_proxy.register_for_execution(name="play_music")(play_music)
 
-# from skills.check_hr import *
-# from skills.check_apnea import *
-# from skills.check_movement import *
 from skills.check_vitals import *
 
 nurse_agent = AssistantAgent(
@@ -51,6 +48,7 @@ nurse_agent = AssistantAgent(
 # user_proxy.register_for_execution(name="check_MM")(check_MM)
 nurse_agent.register_for_llm(name="check_vitals", description="Checks the vitals of the patient.")(check_vitals)
 user_proxy.register_for_execution(name="check_vitals")(check_vitals)
+
 
 from skills.report_life_danger import *
 
