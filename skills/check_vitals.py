@@ -1,4 +1,5 @@
 import sys
+import time
 
 from check_apnea import *
 from check_hr import *
@@ -12,6 +13,8 @@ def check_vitals():
         hr = check_HRM()
         apnea = check_AM()
         movement = check_MM()
+        # TODO: # log_values(save_to="logs.json")
+        time.sleep(60)
         if anomaly_is_detected(hr, apnea, movement):
             break
     return f"#VITALS:\n##HEART RATE\n{hr}\n##APNEA\n{apnea}\n##MOVEMENT\n{movement}"

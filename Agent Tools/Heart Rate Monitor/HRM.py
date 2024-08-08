@@ -43,8 +43,6 @@ class HRM_Model():
             return f"Heart Rate Too Fast: {n_stdev} standard deviations ({anomaly} bpm) more than normal."
         else:
             raise Exception("Failed Anomaly Detection. Error in code.")
-
-
              
 if __name__ == "__main__":
     model = HRM_Model()

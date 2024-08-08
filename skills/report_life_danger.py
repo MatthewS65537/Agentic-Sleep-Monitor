@@ -4,7 +4,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-def send_notification(msg_content):
+def send_notification(msg_content : str = "PATIENT MIGHT BE IN LIFE THREATENING DANGER"):
     """Send a notification to macOS Notification Center."""
     script = f'display notification "{msg_content}" with title "AGENTIC SLEEP MONITOR"'
     subprocess.run(["osascript", "-e", script])
@@ -44,9 +44,10 @@ def send_email(msg_content):
         # Close the connection
         server.quit()
 
-def report_danger(msg):
+def report_danger(msg : str = "PATIENT MIGHT BE IN LIFE THREATENING DANGER"):
     send_email(msg)
     send_notification(msg)
+    return "REPORTED DANGER"
 
 if __name__ == "__main__":
     report_danger("DANGER DANGER")

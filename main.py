@@ -40,7 +40,7 @@ nurse_agent = AssistantAgent(
     "Nurse",
     system_message="You are the nurse of a patient with sleep disorders. You are to monitor their various vitals and ensure they are in good health and report these results for the doctor.",
     llm_config={
-        "config_list" : [groqllama8b_config]
+        "config_list" : [groqllama70b_config]
         }
     )
 # nurse_agent.register_for_llm(name="check_HRM", description="Checks the heart rate of the patient.")(check_HRM)
@@ -52,6 +52,8 @@ nurse_agent = AssistantAgent(
 nurse_agent.register_for_llm(name="check_vitals", description="Checks the vitals of the patient.")(check_vitals)
 user_proxy.register_for_execution(name="check_vitals")(check_vitals)
 
+from skills.report_life_danger import *
+
 doctor_agent = AssistantAgent(
     "Doctor",
     system_message="You are a professional sleep doctor. You are to utilize the nurse's reports on a patient's vitals to diagnose and prescribe treatment for sleep sickness. The only available information that you have are the vitals and you cannot get any treatment results until tomorrow.",
@@ -59,6 +61,8 @@ doctor_agent = AssistantAgent(
         "config_list" : [xiaoai_gpt4o_config]
         }
     )
+doctor_agent.register_for_llm(name="report_danger", description="Sends an emergency notification for when the patient is in life-threatening danger.")(report_danger)
+user_proxy.register_for_execution(name="report_danger")(report_danger)
 
 groupchat = autogen.GroupChat(
     agents=[nurse_agent, doctor_agent, user_proxy],

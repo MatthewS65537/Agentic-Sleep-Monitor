@@ -1,5 +1,7 @@
 /music/
 /.cache/
 .DS_Store
-.gitignore
-.gitattributes
+.cache/41/cache.db
+/.cache
+.DS_Store
+/model_checkpoints
