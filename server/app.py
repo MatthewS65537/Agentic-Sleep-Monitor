@@ -27,4 +27,4 @@ def get_wav():
     return jsonify({'info': audio_string, 'timestamp' : timestamp}), 200
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, threaded=False)
