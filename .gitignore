@@ -6,3 +6,5 @@
 .DS_Store
 /model_checkpoints
 /data
+/Data Streaming/Audio Streaming/recordings
+/Agent Tools/Audio Monitor/plots
