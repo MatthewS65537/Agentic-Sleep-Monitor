@@ -1,6 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+import time
 
 def visualize_csv_data(csv_file):
     # Read the CSV file
@@ -34,8 +35,10 @@ def visualize_csv_data(csv_file):
     plt.title('Labels Presence Over Time')
     plt.tight_layout()
     plt.savefig('./plots/labels_presence_over_time.png')
-    plt.show()
+    # plt.show()
 
 if __name__ == "__main__":
-    csv_file = 'audio_classification_log.csv'
-    visualize_csv_data(csv_file)
+    csv_file = '../../data/audio_classification_log.csv'
+    while True:
+        time.sleep(10)
+        visualize_csv_data(csv_file)

@@ -41,7 +41,7 @@ for i in tqdm(range(100)):
     
     # Create a new thread for saving the recording
     thread = threading.Thread(target=save_recording, 
-                              args=(f"../../data/recording{i}.wav", freq, recording))
+                              args=(f"../../data/recordings/recording{i}.wav", freq, recording))
     thread.start()
     
     # Don't wait for the thread to finish; continue with the next recording

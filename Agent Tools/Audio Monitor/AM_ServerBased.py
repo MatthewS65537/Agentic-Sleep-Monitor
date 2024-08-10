@@ -50,10 +50,11 @@ if __name__ == "__main__":
     model.eval()
 
     # Initialize CSV
-    with open('audio_classification_log.csv', mode='w', newline='') as file:
+    with open('../../data/audio_classification_log.csv', mode='w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(['audio_time', 'label'])
 
+    reading_no = 0
     while True:
         time.sleep(5)
 
@@ -65,7 +66,7 @@ if __name__ == "__main__":
             continue
         audio_time = response.json()["timestamp"]
         start_time = time.time()
-        MFCC = load_wav_into_tensor(f"../../data/{msg}")
+        MFCC = load_wav_into_tensor(f"../../data/recordings/{msg}")
         MFCC = MFCC.reshape([1, 32, 937]).to(dtype=torch.float32)
         logits = model(MFCC)
         label_idx = torch.argmax(logits)
@@ -74,5 +75,6 @@ if __name__ == "__main__":
         labels = ["Normal Sleep", "Hypopnea", "Snore", "ObstructiveApnea", "MixedApnea"]
         label = labels[label_idx]
 
-        print(audio_time, label)
+        print(f"Reading No. {reading_no}; {audio_time:.2f}; {label}")
         log_to_csv(audio_time, label)
+        reading_no += 1
