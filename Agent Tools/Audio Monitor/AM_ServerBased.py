@@ -49,8 +49,9 @@ if __name__ == "__main__":
     model = AudioTransformer.load_from_checkpoint("../../model_checkpoints/AudioClassificationModel.ckpt")
     model.eval()
 
+    uuid = int(time.time())
     # Initialize CSV
-    with open('../../data/audio_classification_log.csv', mode='w', newline='') as file:
+    with open(f'../../data/audio_classification_log_{uuid}.csv', mode='w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(['audio_time', 'label'])
 
