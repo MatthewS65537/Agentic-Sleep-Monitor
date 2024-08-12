@@ -40,7 +40,7 @@ if __name__ == "__main__":
             break
     
     save_dir = "../../data/images"
-    interval = 1
+    interval = 5
     ensure_dir(save_dir)
     cap = cv2.VideoCapture(camera_idx)
 

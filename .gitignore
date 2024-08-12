@@ -10,3 +10,7 @@
 /Agent Tools/Audio Monitor/plots
 Agent Tools/Audio Monitor/audio_classification_log.csv
 /Data Streaming/Audio Streaming/recordings
+/Agent Clinic/.cache
+Django/db.sqlite3
+Monitors/Audio Monitor/plots/labels_presence_over_time.png
+Monitors/Audio Monitor/audio_classification_log.csv

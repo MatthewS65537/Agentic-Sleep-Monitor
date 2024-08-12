@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Datastream Index</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/datastream.css' %}">
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <a href="{% url 'home' %}">THE MONITOR</a>
+        </div>
+        <ul>
+            <li><a href="{% url 'index'%}">Datastream</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <h1>Datastream</h1>
+    This page displays, <b>LIVE</b>, all the data the sensors are collecting. Cool, eh?
+    <h3>Audio Monitor</h3>
+    <div id="audio-monitor">
+        <p>Audio Monitor</p>
+    </div>
+
+</body>
+</html>

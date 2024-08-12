@@ -1,0 +1,193 @@
+/** Colors **/
+:root {
+    --logo-color: #227BFF;
+    --logo-gradient: var(--logo-color) 0%, #E05B7C 85%;
+    --title-color: #5AE609;
+    --title-gradient: var(--title-color) 0%, #FAB907 53%, #E60909 100%;
+    --h1-color: #ffb300;
+    /* --h1-gradient: var(--h1-color), #7903f6 80%, #360057 100%; */
+    --h1-gradient: var(--h1-color), #7903f6 100%, #360057 100%;
+    --h2-color: #1392ed;
+    --h2-gradient: var(--h2-color), #2d1efa 30%;
+    --h3-color: #7FE609;
+    --h3-gradient: var(--h3-color), #29C91A 53%, #10AD2A 100%;
+    --h4-color: #38D2F5;
+    --h4-gradient: var(--h4-color), #53A0ED 53%, #318CE0 100%;
+    --h5-color: #BF4AED;
+    --h5-gradient: var(--h5-color), #6F31E0 53%, #313DE0 100%;
+    --h6-color: #ED4AC7;
+    --h6-gradient: var(--h6-color), #C74AED 53%, #A94AED 100%;
+  }
+  
+  /** Gradient Headers **/
+  
+  /* Fix formatting symbol colors */
+  .cm-formatting-header {
+      color: inherit;
+  }
+ 
+  .cm-header:not(.cm-formatting),
+  :is(h1) {
+      background: linear-gradient(45deg, var(--gradient-header));
+      -webkit-background-clip: text; /* For WebKit browsers */
+      -webkit-text-fill-color: transparent;
+      width: fit-content;
+  }
+  
+  /* Add text-clipped background gradients */
+  .cm-header:not(.cm-formatting),
+  :is(h2, h3, h4, h5, h6) {
+      background: radial-gradient(circle, var(--gradient-header));
+      -webkit-background-clip: text; /* For WebKit browsers */
+      -webkit-text-fill-color: transparent;
+      width: fit-content;
+  }
+  
+  .inline-title {
+      background: radial-gradient(circle, var(--title-gradient)); /* Adjust the gradient colors and direction as needed */
+      -webkit-background-clip: text; /* For WebKit browsers */
+      -webkit-text-fill-color: transparent; /* For WebKit browsers */
+      background-clip: text; /* For other browsers */
+      color: transparent; /* Fallback color */
+      /* whatever else */
+  }
+  
+  
+  /* Apply the gradient variables */
+  .cm-header-1,
+  h1 {
+      --gradient-header: var(--h1-gradient);
+  }
+  
+  .cm-header-2,
+  h2 {
+      --gradient-header: var(--h2-gradient);
+  }
+  
+  .cm-header-3,
+  h3 {
+      --gradient-header: var(--h3-gradient);
+  }
+  
+  .cm-header-4,
+  h4 {
+      --gradient-header: var(--h4-gradient);
+  }
+  
+  .cm-header-5,
+  h5 {
+      --gradient-header: var(--h5-gradient);
+  }
+  
+  .cm-header-6,
+  h6 {
+      --gradient-header: var(--h6-gradient);
+  }
+
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #0a0a0a;
+    color: #ffffff;
+    overflow-x: hidden;
+}
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 50px;
+    background: #1a1a1a;
+}
+
+nav .logo {
+    font-size: 1.5em;
+    font-weight: bold;
+    background: linear-gradient(45deg, var(--logo-gradient));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+nav ul li {
+    display: inline;
+}
+nav ul li a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1em;
+}
+.hero {
+    height: 84.8vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* background: radial-gradient(circle, #0a0a0a 60%, #202020 80%, #848484 100%); */
+    background : #0f0f0f;
+    text-align: center;
+    padding: 0 20px;
+}
+.hero h1 {
+    font-size: 3em;
+    margin: 0;
+}
+.hero p {
+    font-size: 1.2em;
+    margin: 20px 0;
+}
+.hero button {
+    padding: 15px 30px;
+    font-size: 1em;
+    color: #0a0a0a;
+    background: #ffffff;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+.hero button:hover {
+    background: #e0e0e0;
+}
+.features, .about, .contact {
+    padding: 50px 20px;
+    text-align: center;
+}
+.features h2, .about h2, .contact h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+.features p, .about p, .contact p {
+    font-size: 1em;
+    margin: 10px 0;
+}
+footer {
+    background: #1a1a1a;
+    padding: 20px;
+    text-align: center;
+}
+
+/* datastream/static/css/styles.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: black;
+}
+
+#data-stream {
+    border: 1px solid #ccc;
+    padding: 10px;
+    height: 300px;
+    overflow-y: scroll;
+    background-color: black;
+}
+
+#typing-effect {
+    width: 43%;
+    text-align: left;
+}
