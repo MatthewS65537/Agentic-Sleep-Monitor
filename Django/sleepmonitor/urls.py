@@ -22,4 +22,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("datastream/", include("datastream.urls")),
     path("", include("main.urls")),
+    path("report/", include("report.urls")),
 ]

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    {% endblock %}
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <a href="{% url 'home' %}">THE MONITOR</a>
+        </div>
+        <ul>
+            <li><a href="{% url 'datastream'%}">Datastream</a></li>
+            <li><a href="{% url 'report' %}">AI Report</a></li>
+        </ul>
+    </nav>
+
+    {% block content %}
+    {% endblock %}
+
+    <footer>
+        &copy; 2024 SleepMonitor. All rights reserved.
+    </footer>
+
+</body>
+</html>

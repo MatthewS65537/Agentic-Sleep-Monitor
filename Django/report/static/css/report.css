@@ -1,3 +1,4 @@
+/* datastream.css */
 /* datastream/static/css/styles.css */
 /** Colors **/
 :root {
@@ -191,4 +192,66 @@ body {
 #typing-effect {
     width: 43%;
     text-align: left;
+}
+
+/* General Styles */
+
+/* Chat Box Styles */
+#chat-box {
+    width: 80%;
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #333;
+    /* border: 1px solid #888888; */
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 2px 5px #333333;
+    overflow-y: auto;
+    max-height: 400px;
+}
+
+#chat-box p {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #777777;
+}
+
+#chat-box p strong {
+    color: #00ddff;
+}
+
+/* Form Styles */
+form {
+    width: 80%;
+    max-width: 800px;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+form input[type="text"], form textarea {
+    width: 100%;
+    max-width: 700px;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+form button {
+    padding: 10px 20px;
+    background-color: #0088ff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+form button:hover {
+    background-color: #00c8ff;
 }
