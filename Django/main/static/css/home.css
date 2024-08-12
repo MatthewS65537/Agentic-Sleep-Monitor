@@ -188,6 +188,6 @@ body {
 }
 
 #typing-effect {
-    width: 43%;
-    text-align: left;
+    /* width: 43%; */
+    text-align: center;
 }
