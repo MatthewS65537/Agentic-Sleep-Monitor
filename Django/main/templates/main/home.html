@@ -1,54 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Futuristic Sleep Monitor</title>
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
-</head>
-<body>
-    <nav>
-        <div class="logo">
-            <a href="{% url 'home' %}">THE MONITOR</a>
-        </div>
-        <ul>
-            <li><a href="{% url 'datastream'%}">Datastream</a></li>
-            <li><a href="{% url 'report' %}">AI Report</a></li>
-        </ul>
-    </nav>
+{% extends "base.html" %}
 
-    <section class="hero">
-        <img src="{% static 'images/SleepMonitorLogo.png' %}" alt="Sleep Monitor Logo" width="240" height="240" style="padding: 20px;">
-        
-        <h1 id="typing-effect"></h1>
-        <script src="{% static 'js/typing.js' %}"></script>
-        <!-- <h1>Welcome to the Future of Sleep</h1> -->
-        <p>Experience the ultimate personalized and private sleep monitoring system.</p>
-        <button>Get Started</button>
-    </section>
+{% block head %}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Futuristic Sleep Monitor</title>
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
+{% endblock %}
 
-    <!-- <section id="features" class="features">
-        <h2>Features</h2>
-        <p>Advanced Sleep Tracking</p>
-        <p>Personalized Sleep Insights</p>
-        <p>Private and Secure Data</p>
-    </section>
-
-    <section id="about" class="about">
-        <h2>About Us</h2>
-        <p>We are dedicated to improving your sleep quality with the latest technology and personalized insights.</p>
-    </section> -->
-
-    <!-- <section id="contact" class="contact">
-        <h2>Contact Us</h2>
-        <p>Email: support@sleepmonitor.com</p>
-        <p>Phone: +1 234 567 890</p>
-    </section> -->
-
-    <footer>
-        &copy; 2024 SleepMonitor. All rights reserved.
-    </footer>
-
-</body>
-</html>
+{% block content %}
+<section class="hero">
+    <img src="{% static 'images/SleepMonitorLogo.png' %}" alt="Sleep Monitor Logo" width="240" height="240" style="padding: 20px;">
+    
+    <h1 id="typing-effect"></h1>
+    <script src="{% static 'js/typing.js' %}"></script>
+    <!-- <h1>Welcome to the Future of Sleep</h1> -->
+    <p>Experience the ultimate personalized and private sleep monitoring system.</p>
+    <a href="{% url 'about us' %}"><button>Learn More</button></a>
+</section>
+{% endblock %}

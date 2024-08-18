@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block head %}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us</title>
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/about_us.css' %}">
+<script src="{% static 'js/about_us.js' %}" defer></script>
+{% endblock %}
+
+{% block content %}
+<div class="mission-container">
+    <h1 class="mission-title">#Accessibility</h1>
+    <p class="mission-statement">
+        Good software should be made accessible to all. We strive to make our products usable by everyone by optimizing our code to be resource-efficient, allowing them to be deployed on even the most modest hardware.
+    </p>
+
+    <h1 class="mission-title">#Privacy</h1>
+    <p class="mission-statement">
+        We take your privacy seriously. Our products are designed to respect your data and keep it secure. We never sell your data to third parties, and we are committed to maintaining the highest standards of data protection.
+    </p>
+
+    <h1 class="mission-title">#Efficiency</h1>
+    <p class="mission-statement">
+        We used cutting-edge hardware to train our AI models, ensuring our products are as environmentally-friendly as possible. Our software is designed to be as efficient as possible, reducing the amount of energy required to run our products.
+    </p>
+
+    <h1 class="mission-title">#Innovation</h1>
+    <p class="mission-statement">
+        Innovation is at the heart of what we do. We constantly explore new technologies and methodologies to bring you the best solutions. Our team is dedicated to pushing the boundaries of what's possible, ensuring that our products remain at the forefront of technological advancements.
+    </p>
+    
+    <h1 class="mission-title">#Sustainability</h1>
+    <p class="mission-statement">
+        Sustainability is a key consideration in our development process. We are committed to reducing our environmental impact by optimizing our software for energy efficiency and using sustainable practices in our operations. Our goal is to create products that are not only effective but also environmentally responsible.
+    </p>
+    
+    <h1 class="mission-title">#Integrity</h1>
+    <p class="mission-statement">
+        Integrity is the foundation of our business. We conduct ourselves with honesty and transparency, building trust with our users and partners. All data we utilized was obtained ethically. We are committed to ethical practices and stand by our principles in every decision we make.
+    </p>  
+</div>
+{% endblock %}

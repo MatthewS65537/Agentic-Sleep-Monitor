@@ -3,24 +3,57 @@
 <head>
     {% block head %}
     {% endblock %}
+    <style>
+        .navigation{
+            position: fixed;
+            width: 100%;
+        }
+        body {
+            margin: 0;
+            /* padding-bottom: 50px; Adjust based on your footer height */
+            min-height: 100vh;
+            position: relative;
+        }
+        .content {
+            background : #0f0f0f;
+            padding-top: 75px;
+            flex: 1;
+            padding-bottom: 75px;
+        }
+        .footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            background: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1em;
+        }
+    </style>
 </head>
 <body>
-    <nav>
-        <div class="logo">
-            <a href="{% url 'home' %}">THE MONITOR</a>
-        </div>
-        <ul>
-            <li><a href="{% url 'datastream'%}">Datastream</a></li>
-            <li><a href="{% url 'report' %}">AI Report</a></li>
-        </ul>
-    </nav>
+    <div class="navigation">
+        <nav>
+            <div class="logo">
+                <a href="{% url 'home' %}">THE MONITOR</a>
+            </div>
+            <ul>
+                <li><a href="{% url 'about us'%}">About Us</a></li>
+                <li><a href="{% url 'datastream'%}">Datastream</a></li>
+                <li><a href="{% url 'report' %}">AI Report</a></li>
+            </ul>
+        </nav>
+    </div>
 
-    {% block content %}
-    {% endblock %}
-
-    <footer>
-        &copy; 2024 SleepMonitor. All rights reserved.
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+    <footer class="footer">
+        <!-- <footer> -->
+            &copy; 2024 SleepMonitor. All rights reserved.
+        <!-- </footer> -->
     </footer>
-
 </body>
 </html>

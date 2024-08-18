@@ -33,12 +33,13 @@ if __name__ == "__main__":
 
     sd.default.device = device_idx
 
+    time.sleep(30)
+
     try:
         i = 0
         while True:
         # for i in tqdm(range(100)):
             print(f"Started Recording No. {i}")
-            i += 1
             duration = 10
             recording = sd.rec(int(duration * freq), 
                             samplerate=freq, channels=1)
@@ -48,6 +49,7 @@ if __name__ == "__main__":
             thread = threading.Thread(target=save_recording, 
                                       args=(f"../../data/recordings/recording{i}.wav", freq, recording))
             thread.start()
+            i += 1
             # Don't wait for the thread to finish; continue with the next recording
     except KeyboardInterrupt:
         print("[INFO/audio_record.py] Terminated by user.")
