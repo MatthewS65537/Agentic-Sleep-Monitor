@@ -7,7 +7,7 @@ import torch.optim as optim
 import torchmetrics
 
 class AudioClassificationTransformer(nn.Module):
-    def __init__(self, num_classes, d_model=512, nhead=16, num_layers=6, dim_feedforward=1024, dropout=0.25):
+    def __init__(self, num_classes=5, d_model=512, nhead=16, num_layers=6, dim_feedforward=1024, dropout=0.25):
         super(AudioClassificationTransformer, self).__init__()
 
         # 32 MFCC Channels
