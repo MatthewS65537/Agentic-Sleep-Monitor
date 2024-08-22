@@ -51,7 +51,7 @@ model = AudioClassificationTransformer(num_classes=5)
 model.eval()
 
 traced_model = torch.jit.trace(model, test_input)
-out = traced_model(test_input)
+# out = traced_model(test_input)
 
 import coremltools as ct
 
@@ -59,8 +59,15 @@ import coremltools as ct
 # Convert to Core ML program using the Unified Conversion API.
 model = ct.convert(
     traced_model,
-    convert_to="mlprogram",
+    convert_to="neuralnetwork",
     inputs=[ct.TensorType(shape=test_input.shape)]
  )
 
-model.save("AudioClassificationTransformer.mlpackage")
+model.save("AudioClassificationTransformer.mlmodel")
+
+# Print model description
+print(model.description)
+
+# Print input and output descriptions
+print("Inputs:", model.input_description)
+print("Outputs:", model.output_description)

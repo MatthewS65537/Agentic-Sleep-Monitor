@@ -6,7 +6,10 @@
     <style>
         .navigation{
             position: fixed;
+            background: #333;
+            color: #fff;
             width: 100%;
+            z-index: 1;
         }
         body {
             margin: 0;
@@ -15,10 +18,11 @@
             position: relative;
         }
         .content {
-            background : #0f0f0f;
+            /* background : #0f0f0f; */
             padding-top: 75px;
             flex: 1;
             padding-bottom: 75px;
+            z-index: 1;
         }
         .footer {
             position: fixed;
@@ -29,6 +33,7 @@
             color: #fff;
             text-align: center;
             padding: 1em;
+            z-index: 1
         }
     </style>
 </head>
@@ -45,6 +50,9 @@
             </ul>
         </nav>
     </div>
+
+    {% block spline %}
+    {% endblock %}
 
     <div class="content">
         {% block content %}

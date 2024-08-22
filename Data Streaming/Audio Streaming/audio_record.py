@@ -33,7 +33,7 @@ if __name__ == "__main__":
 
     sd.default.device = device_idx
 
-    time.sleep(30)
+    # time.sleep(30)
 
     try:
         i = 0
