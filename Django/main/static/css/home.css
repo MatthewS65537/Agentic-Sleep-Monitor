@@ -88,20 +88,23 @@ nav ul li a {
   padding-bottom: 10px;
 }
 
-.content .learn-more button {
-  text-decoration: none;
-  padding: 15px 30px;
-  font-size: 1em;
-  color: #0a0a0a;
-  background: #ffffff;
-  border: none;
-  border-radius: 25px;
-  cursor: pointer;
-  transition: background 0.3s ease;
+.content a #learn-more {
+    background-color: #f0f0f0 !important;
+    color: #333 !important;
+    border: none !important;
+    padding: 12px 24px !important;
+    font-size: 16px !important;
+    border-radius: 25px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) !important;
+    text-decoration: none !important;
+    display: inline-block !important;
 }
 
-.learn-more button:hover {
-  background: #e0e0e0;
+.content a #learn-more:hover {
+    background-color: #e0e0e0 !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
 }
 
 /* Sections */
@@ -181,3 +184,22 @@ nav ul li a {
   padding: 0 20px;
   z-index : 1;
 } */
+
+/* Remove or comment out these conflicting styles */
+/*
+.content .learn-more button {
+    text-decoration: none;
+    padding: 15px 30px;
+    font-size: 1em;
+    color: #0a0a0a;
+    background: #ffffff;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.learn-more button:hover {
+    background: #e0e0e0;
+}
+*/

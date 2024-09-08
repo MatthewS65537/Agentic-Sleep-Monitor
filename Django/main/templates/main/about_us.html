@@ -7,6 +7,39 @@
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/about_us.css' %}">
 <script src="{% static 'js/about_us.js' %}" defer></script>
+<script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.21/build/spline-viewer.js"></script>
+<style>
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+}
+#spline-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+.content {
+    position: relative;
+    z-index: 1;
+    color: white;
+    background: transparent;
+    text-align: center;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+}
+</style>
+{% endblock %}
+
+{% block spline %}
+<spline-viewer id="spline-background" url="https://prod.spline.design/oOBHEn9oM3sVCthq/scene.splinecode"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAXCAYAAABqBU3hAAAMEElEQVR4AQCBAH7/AAgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/AIEAfv8ACAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8AgQB+/wAIBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wCBAH7/AAgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/AIEAfv8ACAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8AgQB+/wAIBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wCBAH7/AAgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/AIEAfv8ACAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8AgQB+/wAIBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wCBAH7/AAgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/AIEAfv8ACAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8AgQB+/wAIBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wCBAH7/AAgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/AIEAfv8ACAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8AgQB+/wAIBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wCBAH7/AAgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/AYEAfv8ACAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv/WRByOphgooQAAAABJRU5ErkJggg==" alt="Spline preview" style="width: 100%; height: 100%;"/></spline-viewer>
 {% endblock %}
 
 {% block content %}
