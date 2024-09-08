@@ -18,7 +18,7 @@ body, html {
     font-family: Arial, sans-serif;
 }
 #spline-background {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -26,52 +26,62 @@ body, html {
     z-index: 0;
 }
 .content {
-    position: relative;
+    position: absolute;
     z-index: 1;
     color: white;
-    background: transparent;
+    background: rgba(0, 0, 0, 0.5);
     text-align: center;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: auto;
+    padding: 20px;
+}
+.mission-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
 }
 </style>
 {% endblock %}
 
 {% block spline %}
-<spline-viewer id="spline-background" url="https://prod.spline.design/oOBHEn9oM3sVCthq/scene.splinecode"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAXCAYAAABqBU3hAAAMEElEQVR4AQCBAH7/AAgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/AIEAfv8ACAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8AgQB+/wAIBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wCBAH7/AAgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/AIEAfv8ACAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8AgQB+/wAIBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wCBAH7/AAgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/AIEAfv8ACAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8AgQB+/wAIBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wCBAH7/AAgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/AIEAfv8ACAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8AgQB+/wAIBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wCBAH7/AAgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/AIEAfv8ACAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8AgQB+/wAIBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wCBAH7/AAgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/AYEAfv8ACAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv/WRByOphgooQAAAABJRU5ErkJggg==" alt="Spline preview" style="width: 100%; height: 100%;"/></spline-viewer>
+<spline-viewer id="spline-background" url="https://prod.spline.design/oOBHEn9oM3sVCthq/scene.splinecode"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAXCAYAAABqBU3hAAAMEElEQVR4AQCBAH7/AAgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/AIEAfv8ACAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8AgQB+/wAIBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wCBAH7/AAgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/AIEAfv8ACAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8AgQB+/wAIBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wCBAH7/AAgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/AIEAfv8ACAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8AgQB+/wAIBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wCBAH7/AAgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/AYEAfv8ACAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv8IBAr/CAQK/wgECv/WRByOphgooQAAAABJRU5ErkJggg==" alt="Spline preview" style="width: 100%; height: 100%;"/></spline-viewer>
 {% endblock %}
 
 {% block content %}
-<div class="mission-container">
-    <h1 class="mission-title">#Accessibility</h1>
-    <p class="mission-statement">
-        Good software should be made accessible to all. We strive to make our products usable by everyone by optimizing our code to be resource-efficient, allowing them to be deployed on even the most modest hardware.
-    </p>
+<div class="content">
+    <div class="mission-container">
+        <h1 class="mission-title">#Accessibility</h1>
+        <p class="mission-statement">
+            Good software should be made accessible to all. We strive to make our products usable by everyone by optimizing our code to be resource-efficient, allowing them to be deployed on even the most modest hardware.
+        </p>
 
-    <h1 class="mission-title">#Privacy</h1>
-    <p class="mission-statement">
-        We take your privacy seriously. Our products are designed to respect your data and keep it secure. We never sell your data to third parties, and we are committed to maintaining the highest standards of data protection.
-    </p>
+        <h1 class="mission-title">#Privacy</h1>
+        <p class="mission-statement">
+            We take your privacy seriously. Our products are designed to respect your data and keep it secure. We never sell your data to third parties, and we are committed to maintaining the highest standards of data protection.
+        </p>
 
-    <h1 class="mission-title">#Efficiency</h1>
-    <p class="mission-statement">
-        We used cutting-edge hardware to train our AI models, ensuring our products are as environmentally-friendly as possible. Our software is designed to be as efficient as possible, reducing the amount of energy required to run our products.
-    </p>
+        <h1 class="mission-title">#Efficiency</h1>
+        <p class="mission-statement">
+            We used cutting-edge hardware to train our AI models, ensuring our products are as environmentally-friendly as possible. Our software is designed to be as efficient as possible, reducing the amount of energy required to run our products.
+        </p>
 
-    <h1 class="mission-title">#Innovation</h1>
-    <p class="mission-statement">
-        Innovation is at the heart of what we do. We constantly explore new technologies and methodologies to bring you the best solutions. Our team is dedicated to pushing the boundaries of what's possible, ensuring that our products remain at the forefront of technological advancements.
-    </p>
-    
-    <h1 class="mission-title">#Sustainability</h1>
-    <p class="mission-statement">
-        Sustainability is a key consideration in our development process. We are committed to reducing our environmental impact by optimizing our software for energy efficiency and using sustainable practices in our operations. Our goal is to create products that are not only effective but also environmentally responsible.
-    </p>
-    
-    <h1 class="mission-title">#Integrity</h1>
-    <p class="mission-statement">
-        Integrity is the foundation of our business. We conduct ourselves with honesty and transparency, building trust with our users and partners. All data we utilized was obtained ethically. We are committed to ethical practices and stand by our principles in every decision we make.
-    </p>  
+        <h1 class="mission-title">#Innovation</h1>
+        <p class="mission-statement">
+            Innovation is at the heart of what we do. We constantly explore new technologies and methodologies to bring you the best solutions. Our team is dedicated to pushing the boundaries of what's possible, ensuring that our products remain at the forefront of technological advancements.
+        </p>
+        
+        <h1 class="mission-title">#Sustainability</h1>
+        <p class="mission-statement">
+            Sustainability is a key consideration in our development process. We are committed to reducing our environmental impact by optimizing our software for energy efficiency and using sustainable practices in our operations. Our goal is to create products that are not only effective but also environmentally responsible.
+        </p>
+        
+        <h1 class="mission-title">#Integrity</h1>
+        <p class="mission-statement">
+            Integrity is the foundation of our business. We conduct ourselves with honesty and transparency, building trust with our users and partners. All data we utilized was obtained ethically. We are committed to ethical practices and stand by our principles in every decision we make.
+        </p>  
+    </div>
 </div>
 {% endblock %}

@@ -1,5 +1,3 @@
-/* datastream.css */
-/* datastream/static/css/styles.css */
 /** Colors **/
 :root {
     --logo-color: #227BFF;
@@ -7,12 +5,11 @@
     --title-color: #5AE609;
     --title-gradient: var(--title-color) 0%, #FAB907 53%, #E60909 100%;
     --h1-color: #ffb300;
-    /* --h1-gradient: var(--h1-color), #7903f6 80%, #360057 100%; */
-    --h1-gradient: var(--h1-color), #7903f6 100%, #360057 100%;
-    --h2-color: #1392ed;
-    --h2-gradient: var(--h2-color), #2d1efa 30%;
-    --h3-color: #7FE609;
-    --h3-gradient: var(--h3-color), #29C91A 53%, #10AD2A 100%;
+    --h1-gradient: var(--h1-color), #7903f6 100%;
+    --h2-color: #ffb300;
+    --h2-gradient: var(--h2-color), #7903f6 100%;
+    --h3-color: #227BFF;
+    --h3-gradient: var(--h3-color), #E05B7C 100%;
     --h4-color: #38D2F5;
     --h4-gradient: var(--h4-color), #53A0ED 53%, #318CE0 100%;
     --h5-color: #BF4AED;
@@ -29,17 +26,8 @@
   }
  
   .cm-header:not(.cm-formatting),
-  :is(h1) {
+  :is(h1, h2, h3, h4, h5, h6) {
       background: linear-gradient(45deg, var(--gradient-header));
-      -webkit-background-clip: text; /* For WebKit browsers */
-      -webkit-text-fill-color: transparent;
-      width: fit-content;
-  }
-  
-  /* Add text-clipped background gradients */
-  .cm-header:not(.cm-formatting),
-  :is(h2, h3, h4, h5, h6) {
-      background: radial-gradient(circle, var(--gradient-header));
       -webkit-background-clip: text; /* For WebKit browsers */
       -webkit-text-fill-color: transparent;
       width: fit-content;
@@ -86,15 +74,11 @@
       --gradient-header: var(--h6-gradient);
   }
 
-body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    background: #0a0a0a;
-    color: #ffffff;
-    overflow-x: hidden;
-}
-nav {
+  body {
+    font-family: Arial, sans-serif;
+    background-color: black;
+  }
+  nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -112,146 +96,16 @@ nav .logo {
     color: transparent;
 }
 
-nav ul {
+  nav ul {
     list-style: none;
     display: flex;
     gap: 20px;
-}
-nav ul li {
+  }
+  nav ul li {
     display: inline;
-}
-nav ul li a {
+  }
+  nav ul li a {
     color: #ffffff;
     text-decoration: none;
     font-size: 1em;
-}
-.hero {
-    height: 84.8vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    /* background: radial-gradient(circle, #0a0a0a 60%, #202020 80%, #848484 100%); */
-    background : #0f0f0f;
-    text-align: center;
-    padding: 0 20px;
-}
-.hero h1 {
-    font-size: 3em;
-    margin: 0;
-}
-.hero p {
-    font-size: 1.2em;
-    margin: 20px 0;
-}
-.hero button {
-    padding: 15px 30px;
-    font-size: 1em;
-    color: #0a0a0a;
-    background: #ffffff;
-    border: none;
-    border-radius: 25px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-}
-.hero button:hover {
-    background: #e0e0e0;
-}
-.features, .about, .contact {
-    padding: 50px 20px;
-    text-align: center;
-}
-.features h2, .about h2, .contact h2 {
-    font-size: 2em;
-    margin-bottom: 20px;
-}
-.features p, .about p, .contact p {
-    font-size: 1em;
-    margin: 10px 0;
-}
-footer {
-    background: #1a1a1a;
-    padding: 20px;
-    text-align: center;
-}
-
-/* datastream/static/css/styles.css */
-body {
-    font-family: Arial, sans-serif;
-    background-color: black;
-}
-
-#data-stream {
-    border: 1px solid #ccc;
-    padding: 10px;
-    height: 300px;
-    overflow-y: scroll;
-    background-color: black;
-}
-
-#typing-effect {
-    width: 43%;
-    text-align: left;
-}
-
-/* General Styles */
-
-/* Chat Box Styles */
-#chat-box {
-    width: 80%;
-    max-width: 800px;
-    margin: 20px auto;
-    background-color: #333;
-    /* border: 1px solid #888888; */
-    border-radius: 5px;
-    padding: 20px;
-    box-shadow: 0 2px 5px #333333;
-    overflow-y: auto;
-    max-height: 400px;
-}
-
-#chat-box p {
-    margin: 10px 0;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: #777777;
-}
-
-#chat-box p strong {
-    color: #00ddff;
-}
-
-/* Form Styles */
-form {
-    width: 80%;
-    max-width: 800px;
-    margin: 20px auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-form input[type="text"], form textarea {
-    width: 100%;
-    max-width: 700px;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 16px;
-}
-
-form button {
-    padding: 10px 20px;
-    background-color: #0088ff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-form button:hover {
-    background-color: #00c8ff;
-}
+  }

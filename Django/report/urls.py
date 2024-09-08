@@ -6,5 +6,4 @@ from . import views
 
 urlpatterns = [
     path("", views.display_report, name="report"),
-    path('send/', views.send_message, name='send_message'),
 ]

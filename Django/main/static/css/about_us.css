@@ -34,7 +34,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 20px 50px;
-    background: #1a1a1a;
+    background: #333;
   }
   
   nav .logo {
@@ -99,20 +99,7 @@
   .cm-header-4, h4 { --gradient-header: var(--h4-gradient); }
   .cm-header-5, h5 { --gradient-header: var(--h5-gradient); }
   .cm-header-6, h6 { --gradient-header: var(--h6-gradient); }
-  
-  /* Data Stream Styles */
-  #data-stream {
-    border: 1px solid #ccc;
-    padding: 10px;
-    height: 300px;
-    overflow-y: scroll;
-    background-color: #1a1a1a;
-  }
-  
-  #typing-effect {
-    text-align: center;
-  }
-  
+
   .mission-container {
     text-align: center;
     padding-right: 200px;
@@ -128,7 +115,7 @@
   
   .mission-statement {
     font-size: 1.2em;
-    color: #666;
+    color: #c8c8c8;
     max-width: 1000px;
     margin: 0 auto;
     line-height: 1.6;

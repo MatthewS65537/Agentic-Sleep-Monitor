@@ -2,23 +2,26 @@
 
 {% block head %}
 <meta charset="UTF-8">
-<title>Datastream Index</title>
+<title>Report</title>
+<style>
+.report-container {
+    padding-top: 200px;
+    padding-bottom: 200px;
+    margin-bottom: -50px;
+    margin-left: 200px;
+    margin-right: 200px;
+    padding: 20px;
+    background: #222;
+    color: #eee;
+}
+</style>
+
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/report.css' %}">
-<!-- <script src="{% static 'js/reload_chat.js' %}"></script> -->
 {% endblock %}
 
 {% block content %}
-<h1>Chat Room</h1>
-<div id="chat-box">
-    {% for message in messages %}
-        <p><strong>{{ message.username }}:</strong> {{ message.content }}</p>
-    {% endfor %}
+<div class="report-container">
+    {{ report_content|safe }}
 </div>
-<form method="post" action="{% url 'send_message' %}">
-    {% csrf_token %}
-    <input type="text" name="username" placeholder="Your name" value="USER" required><br>
-    <textarea name="content" rows="3" cols="50" placeholder="Your message" required></textarea><br>
-    <button type="submit">Send</button>
-</form>
 {% endblock %}
