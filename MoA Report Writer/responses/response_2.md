@@ -1,17 +1,31 @@
 ## Recommendations
 
 ### Recommendation 1
-- Given your sleep duration, light sleep contributes significantly to nighttime discomfort. It is recommended to discuss potential strategies for improving sleep quality and consistency with a certified sleep technician or certified sleep coach.  Exploring tools for managing daytime fatigue and incorporating relaxation techniques into your nightly routine may be beneficial.
- 
-### Recommendation 2
- -  Your AHI score of 3.2 indicates mild obstructive sleep apnea (OSA). This means that you are likely experiencing some episodes of disrupted breathing during your sleep which could negatively affect the overall quality of your sleep and potentially lead to daytime fatigue and health issues if not addressed.
-
- ## Points of Concern 
-- Your reported RESTLESSNESS AND SLEEP TALKING episodes at specific times in the night, highlight the fact you may be struggling with sleep-related concerns that need further investigation. You may benefit from a sleep study followed by consultation with an expert such as a sleep disorder specialist if your condition does not improve by implementing lifestyle changes. 
+-  Given your overall sleep efficiency of 91%, with a stable sleep pattern, you show good consistency in attaining restful sleep. However, the presence of restlessness at 2:15 AM suggests potential interruptions during the night requiring further investigation. 
+   - Discuss these specific disruptions and potential causes during your next consultation. 
 
 
- ## Potential Issues
- - Although it’s not explicitly confirmed through this limited information, it's worth considering the possibility of underlying health conditions that could directly or indirectly impact your sleep. These may include hormonal imbalances, anxiety, and other physical ailments.
+### Recommendation 2 
+-  Investigate potential sleep disturbances based on the recorded episodes of snoring (averaging 14 episodes over 8 hours, some with significant intensity). These could indicate factors impacting breathing quality while sleeping, such as blockage in nasal passages or tongue displacement.  A detailed sleep study should be evaluated to identify underlying causes and guide tailored treatment options.
+   - We recommend evaluating the possibility of an upper airway soft tissue intervention for more complex cases. 
+
+
+## Points of Concern
+
+- Restlessness observed at 2:15 AM warrants further evaluation during your next consultation as it may indicate disrupted sleep stages or potential anxiety related to the sleep cycle.
+- Snoring episodes remain a notable concern, potentially caused by sleep apnea. 
+
+
+
+## Potential Issues
+
+-  While overall sleep quality suggests good sleep, the recorded heart rate increase in response to breathing and resting cycles during sleep could be an indication of possible autonomic nervous system dysregulation.
+
 
 ## Further Action
-- It is highly recommended you consult with a healthcare professional to assess the possible causes for your current sleep troubles. This would be particularly important in evaluating whether lifestyle changes are sufficient to improve your sleep overall. 
+
+- To better understand your sleep experience, we strongly encourage discussing these findings with me and planning a comprehensive follow-up appointment. 
+   - For optimal treatment, it's encouraged that you maintain a regular sleep schedule and limit screen time before going to bed.  
+
+
+

@@ -108,6 +108,7 @@ if __name__ == "__main__":
     other_tokens = 0
 
     agents = [
+        LLMConfig(model_name, 0.55),
         LLMConfig(model_name, 0.5),
         LLMConfig(model_name, 0.45),
         LLMConfig(model_name, 0.4)
@@ -126,7 +127,7 @@ if __name__ == "__main__":
 
     template_agent = LLMConfig(model_name, 0.7)
     template_agent_messages = [
-        {"role": "system", "content": "You are a meticulous editor reviewing a medical report. Your primary task is to ensure the report's formatting adheres strictly to the provided markdown template. Focus on correcting any grammatical errors, removing extra spaces and empty lines, while also maintaining consistent formatting. Ensure all sections from the template are present and properly formatted. Do not alter the content unless it's to fix formatting issues."},
+        {"role": "system", "content": "You are a meticulous editor reviewing a medical report. Your primary task is to ensure the report's formatting adheres strictly to the provided markdown template. Focus on correcting any grammatical errors, removing extra spaces and empty lines, while also maintaining consistent formatting. Ensure all sections from the template are present and properly formatted. Do not alter the content unless it's to fix formatting issues. Do not add any notes or comments such as 'Here is the updated report with corrections' or 'I have reviewed the report and made the necessary changes'."},
         {"role": "user", "content": f"Please review and correct the formatting of this report:\n{agent_response['final_response']}\n\nEnsure it strictly follows this markdown template:\n{template}\n\nFocus on fixing any formatting issues, grammatical errors, extra spaces, or extra lines. Maintain the original content as much as possible while ensuring perfect adherence to the template structure."}
     ]
     checked_final_response = client.chat.completions.create(
@@ -147,3 +148,50 @@ if __name__ == "__main__":
 
     with open("./responses/final_response.md", "w") as f:
         f.write(checked_final_response.choices[0].message.content)
+    
+    pre_template = """# Your Sleep Report
+Please find below, your sleep report generated from your sleep data.
+
+**Warning**: This report is not a replacement for medical diagnosis. It is tool powered by AI to help you understand your sleep data, and identify potential areas of concern.
+
+## Sleep Data
+Date: August 11, 2024
+### Sleep Duration
+- Total Sleep Time: 7 hours 23 minutes
+- Time in Bed: 8 hours 5 minutes
+- Sleep Efficiency: 91%
+### Sleep Stages
+- Light Sleep: 3 hours 42 minutes (50.2%)
+- Deep Sleep: 1 hour 51 minutes (25.1%)
+- REM Sleep: 1 hour 50 minutes (24.7%)
+### Snoring
+- Total Snoring Time: 42 minutes
+- Snoring Episodes: 14
+- Average Snoring Intensity: 48 dB
+### Sleep Apnea
+- Apnea-Hypopnea Index (AHI): 3.2 events/hour
+- Total Apnea Events: 24
+- Longest Apnea Duration: 18 seconds
+### Heart Rate
+- Average Heart Rate: 62 bpm
+- Lowest Heart Rate: 54 bpm
+- Highest Heart Rate: 78 bpm
+### Breathing Rate
+- Average Breathing Rate: 14 breaths/minute
+- Lowest Breathing Rate: 12 breaths/minute
+- Highest Breathing Rate: 16 breaths/minute
+### Other Metrics
+- Body Temperature Variation: -0.3°C
+- Room Temperature: 20.5°C
+- Room Humidity: 45%
+- Noise Level: Average 32 dB, Peak 58 dB
+### Sleep Quality Score
+- Overall Sleep Quality: 82/100
+### Notes
+- Restlessness detected at 2:15 AM, duration: 5 minutes
+- Sleep talking episode at 4:32 AM, duration: 12 seconds
+"""
+    with open("../Django/report/static/md/report.md", "w") as f:
+        f.write(pre_template + checked_final_response.choices[0].message.content)
+
+        
