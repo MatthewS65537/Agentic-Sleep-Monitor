@@ -5,29 +5,47 @@ import numpy as np
 
 def read_pkl_files():
     results = {}
-    for filename in os.listdir():
-        if filename.startswith('local_evaluation_results_') and filename.endswith('.pkl'):
-            model_name = filename.replace('local_evaluation_results_', '').replace('.pkl', '')
-            with open(filename, 'rb') as f:
+    for filename in os.listdir("./results"):
+        if filename.startswith('open_evaluation_results_zeroshot_') and filename.endswith('.pkl'):
+            model_name = filename.replace('open_evaluation_results_zeroshot_', '').replace('.pkl', '') + " @ 1 Pass"
+            with open(f"./results/{filename}", 'rb') as f:
+                results[model_name] = pickle.load(f)
+        elif filename.startswith('local_evaluation_results_') and filename.endswith('.pkl'):
+            model_name = filename.replace('local_evaluation_results_', '').replace('.pkl', '') + " @ MoA"
+            with open(f"./results/{filename}", 'rb') as f:
                 results[model_name] = pickle.load(f)
     
-    for filename in os.listdir():
+    for filename in os.listdir("./results"):
         if filename.startswith('closed_evaluation_results_') and filename.endswith('.pkl'):
-            model_name = filename.replace('closed_evaluation_results_', '').replace('.pkl', '')
-            with open(filename, 'rb') as f:
+            model_name = filename.replace('closed_evaluation_results_', '').replace('.pkl', '') + " @ 1 Pass"
+            with open(f"./results/{filename}", 'rb') as f:
                 results[model_name] = pickle.load(f)
     return results
 
 evaluation_results = read_pkl_files()
-models = list(evaluation_results.keys())
+models = [
+    "phi3.5:latest @ 1 Pass",
+    "gemma2:2b @ 1 Pass",
+    "qwen2:1.5b @ 1 Pass",
+    "phi3.5:latest @ MoA",
+    "gemma2:2b @ MoA",
+    "qwen2:1.5b @ MoA",
+    "gpt-4o-2024-08-06 @ 1 Pass",
+    "gpt-4o-mini @ 1 Pass",
+]
+
+print(models)
 
 # Define colors for each model
 colors = {
-    "phi3.5:latest": "blue",
-    "gemma2:2b": "orange",
-    "qwen2:1.5b": "green",
-    "gpt-4o-2024-08-06": "red",
-    "gpt-4o-mini": "yellow"
+    "phi3.5:latest @ 1 Pass": "#001aff",
+    "gemma2:2b @ 1 Pass": "#006aff",
+    "qwen2:1.5b @ 1 Pass": "#00d9ff",
+    "phi3.5:latest @ MoA": "#8000ff",
+    "gemma2:2b @ MoA": "#bb00ff",
+    "qwen2:1.5b @ MoA": "#c75bcf",
+    "gpt-4o-2024-08-06 @ 1 Pass": "#ff0000",
+    "gpt-4o-mini @ 1 Pass": "#ff8800",
 }
 
 class Result:
@@ -44,14 +62,14 @@ for model in models:
     relevancy = 0.0
     style = 0.0
     avg = 0.0
-    for eval in evaluation_results[model][model]:
+    for eval in evaluation_results[model][model.split(" @")[0]]:
         accuracy += eval["ratings"]["Accuracy"]
         clarity += eval["ratings"]["Clarity"]
         relevancy += eval["ratings"]["Relevancy"]
         style += eval["ratings"]["Style"]
     avg = (accuracy + clarity + relevancy + style) / 4
 
-    num_evals = len(evaluation_results[model][model])
+    num_evals = len(evaluation_results[model][model.split(" @")[0]])
     accuracy /= num_evals
     clarity /= num_evals
     relevancy /= num_evals
@@ -76,10 +94,9 @@ width = 0.15
 multiplier = 0
 
 for model in models:
-    suffix = " @ 1-Pass" if model in ["gpt-4o-2024-08-06", "gpt-4o-mini"] else " @ MoA"
     model_scores = [results_data[model][attribute] for attribute in attributes]
     offset = width * multiplier
-    rects = ax.bar(x + offset, model_scores, width, label=model+suffix, color=colors[model])
+    rects = ax.bar(x + offset, model_scores, width, label=model, color=colors[model])
     ax.bar_label(rects, padding=3, rotation=90, fmt='%.2f')
     multiplier += 1
 
@@ -107,11 +124,14 @@ speeds = {
 }
 
 times = {
-    "phi3.5:latest": 340,
-    "gemma2:2b": 107,
-    "qwen2:1.5b": 73,
-    "gpt-4o-2024-08-06": 7,
-    "gpt-4o-mini": 4
+    "phi3.5:latest @ 1 Pass": 54,
+    "gemma2:2b @ 1 Pass": 15,
+    "qwen2:1.5b @ 1 Pass": 15,
+    "phi3.5:latest @ MoA": 340,
+    "gemma2:2b @ MoA": 107,
+    "qwen2:1.5b @ MoA": 73,
+    "gpt-4o-2024-08-06 @ 1 Pass": 7,
+    "gpt-4o-mini @ 1 Pass": 4,
 }
 
 price_1k = {
@@ -125,14 +145,14 @@ price_1k = {
 latency_data = {}
 for model in models:
     total_tokens = 0
-    for eval in evaluation_results[model][model]:
+    for eval in evaluation_results[model][model.split(" @")[0]]:
         total_tokens += eval["total_tokens"]
 
     latency_data[model] = {
-        "total_tokens": total_tokens/len(evaluation_results[model][model]),
+        "total_tokens": total_tokens/len(evaluation_results[model][model.split(" @")[0]]),
         "time": times[model],
-        "speed": speeds[model],
-        "cost": total_tokens/len(evaluation_results[model][model]) * price_1k[model]/1000 * 100
+        "speed": speeds[model.split(" @")[0]],
+        "cost": total_tokens/len(evaluation_results[model][model.split(" @")[0]]) * price_1k[model.split(" @")[0]]/1000 * 100
     }
 
 # Visualization of latency data
@@ -174,7 +194,7 @@ plt.close()
 print("Latency analysis visualization saved as 'latency_analysis.png'")
 
 # Combined Visualization of Evaluation Results and Latency Data
-fig = plt.figure(figsize=(17, 9))
+fig = plt.figure(figsize=(25, 12))
 gs = fig.add_gridspec(2, 4)
 
 ax1 = fig.add_subplot(gs[0, :])
@@ -184,14 +204,13 @@ ax4 = fig.add_subplot(gs[1, 2])
 ax5 = fig.add_subplot(gs[1, 3])
 
 x = np.arange(len(attributes))
-width = 0.15
+width = 0.1
 multiplier = 0
 
 for model in models:
-    suffix = " @ 1-Pass" if model in ["gpt-4o-2024-08-06", "gpt-4o-mini"] else " @ MoA"
     model_scores = [results_data[model][attribute] for attribute in attributes]
     offset = width * multiplier
-    rects = ax1.bar(x + offset, model_scores, width, label=model+suffix, color=colors[model])
+    rects = ax1.bar(x + offset, model_scores, width, label=model, color=colors[model])
     ax1.bar_label(rects, padding=3, rotation=90, fmt='%.2f')
     multiplier += 1
 
@@ -207,28 +226,40 @@ tokens = [latency_data[model]["total_tokens"] for model in models]
 ax2.bar(models, tokens, color=[colors[model] for model in models])
 ax2.set_title('Total Tokens')
 ax2.set_ylabel('Tokens')
-ax2.tick_params(axis='x', rotation=45)
+ax2.tick_params(axis='x', which='both', bottom=False, top=False, labelbottom=False)
 
 # Plot 3: Time
 times = [latency_data[model]["time"] for model in models]
 ax3.bar(models, times, color=[colors[model] for model in models])
 ax3.set_title('Time per Response')
 ax3.set_ylabel('Seconds')
-ax3.tick_params(axis='x', rotation=45)
+ax3.tick_params(axis='x', which='both', bottom=False, top=False, labelbottom=False)
 
 # Plot 4: Speed
 speeds = [latency_data[model]["speed"] for model in models]
 ax4.bar(models, speeds, color=[colors[model] for model in models])
 ax4.set_title('Speed')
 ax4.set_ylabel('Tokens/second')
-ax4.tick_params(axis='x', rotation=45)
+ax4.tick_params(axis='x', which='both', bottom=False, top=False, labelbottom=False)
 
 # Plot 5: Cost
 costs = [latency_data[model]["cost"] for model in models]
 ax5.bar(models, costs, color=[colors[model] for model in models])
 ax5.set_title('Cost per Response')
 ax5.set_ylabel('Cents (USD)')
-ax5.tick_params(axis='x', rotation=45)
+ax5.tick_params(axis='x', which='both', bottom=False, top=False, labelbottom=False)
 
 plt.tight_layout()
 plt.savefig('combined_visualization.png')
+plt.close()
+
+print("Combined visualization saved as 'combined_visualization.png'")
+
+# Print all results at the end
+print("\nResults Data:")
+for model, data in results_data.items():
+    print(f"{model}: {data}")
+
+print("\nLatency Data:")
+for model, data in latency_data.items():
+    print(f"{model}: {data}")

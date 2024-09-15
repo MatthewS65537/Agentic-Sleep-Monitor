@@ -4,6 +4,7 @@ import platform
 import time
 import argparse
 from tqdm import tqdm
+from datetime import datetime
 
 sys.path.append("./Audio Monitor")
 
@@ -76,13 +77,13 @@ class UniversalInferenceEngine():
 import csv
 import os
 
-def log_to_csv(timestamp, label, log_path):
+def log_to_csv(timestamps, labels, log_path):
     """
     Append an entry to a CSV log file.
     
     :param timestamp: float, the timestamp of the audio classification
     :param label: str, the predicted label
-    :param log_file: str, the name of the log file (default: 'audio_classification_log.csv')
+    :param log_path: str, the path of the log file
     """
     
     # Create the directory if it doesn't exist
@@ -91,26 +92,25 @@ def log_to_csv(timestamp, label, log_path):
     # Check if the file exists, if not, create it with a header
     file_exists = os.path.isfile(log_path)
     
-    with open(log_path, 'a', newline='') as csvfile:
+    with open(log_path, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
-        
-        # Write header if the file is newly created
-        if not file_exists:
-            writer.writerow(['Timestamp', 'Label'])
-        
-        # Append the new entry
-        writer.writerow([timestamp, label])
+        writer.writerow(['Timestamp', 'Label'])
+        for timestamp, label in zip(timestamps, labels):
+            writer.writerow([timestamp, label])
 
 
 if __name__ == "__main__":
-    start_time = time.time()
-    logpath = f'../../data/audio_logs/audio_classification_log_{start_time}.csv'
+    start_time = datetime.now().strftime("%Y%m%d_%H%M%S")
+    logpath = f'../data/audio_logs/audio_classification_log_{start_time}.csv'
+    timestamps = []
+    labels = []
+
     parser = argparse.ArgumentParser(description="Audio Classification Model")
     parser.add_argument("--device", type=str, default="Torch", help="Specify the device to use (e.g., 'cpu', 'cuda', 'mps')")
     args = parser.parse_args()
     
     inf_platform = args.device
-    if inf_platform == None:
+    if inf_platform is None:
         inf_platform = get_inference_platform()
     
     if inf_platform == "Torch":
@@ -128,42 +128,47 @@ if __name__ == "__main__":
     print("[INFO] Loaded Audio Model.")
 
     reading_no = 0
-    # while True:
-    #     time.sleep(5)
 
-    #     response = requests.get(AudioEndpoint)
-    #     # print(response.json())
-    #     msg = response.json()["info"]
-    #     if msg == "Queue is empty":
-    #         print(time.time(), msg)
-    #         continue
-    #     audio_time = response.json()["timestamp"]
+    try:
+        while True:
+            time.sleep(5)
+            response = requests.get(AudioEndpoint)
+            # print(response.json())
+            msg = response.json()["info"]
+            if msg == "Queue is empty":
+                print(time.time(), msg)
+                continue
+            audio_time = response.json()["timestamp"]
+            start_time = time.time()
+            MFCC = load_wav_into_tensor(f"../data/recordings/{msg}")
+            MFCC = MFCC.reshape([1, 32, 937]).to(dtype=torch.float32)
+            label_idx = AudioModel.predict(MFCC)
+            end_time = time.time()
+            
+            labels = ["NormalSleep", "Hypopnea", "Snore", "ObstructiveApnea", "MixedApnea"]
+            label = labels[label_idx]
+
+            print(f"Reading No. {reading_no}; {audio_time:.2f}; {label}")
+            timestamps.append(audio_time)
+            labels.append(label)
+            log_to_csv(timestamps, labels, logpath)
+            reading_no += 1
+    except KeyboardInterrupt:
+        print("[INFO] Exiting...")
+
+    # logpath = f'../data/audio_logs/audio_classification_log_AUG13DEMO.csv'
+    # for i in tqdm(range(1, 2319)):
     #     start_time = time.time()
-    #     MFCC = load_wav_into_tensor(f"../data/recordings/{msg}")
+    #     MFCC = load_wav_into_tensor(f"../data/demo_recordings/recording{i}.wav")
     #     MFCC = MFCC.reshape([1, 32, 937]).to(dtype=torch.float32)
     #     label_idx = AudioModel.predict(MFCC)
     #     end_time = time.time()
+
+    #     audio_time = int(os.path.getctime(f"../data/demo_recordings/recording{i}.wav"))
         
     #     labels = ["NormalSleep", "Hypopnea", "Snore", "ObstructiveApnea", "MixedApnea"]
     #     label = labels[label_idx]
 
-    #     print(f"Reading No. {reading_no}; {audio_time:.2f}; {label}")
+    #     # print(f"Reading No. {i}; {audio_time:.2f}; {label}")
     #     log_to_csv(audio_time, label, logpath)
-    #     reading_no += 1
-
-    logpath = f'../data/audio_logs/audio_classification_log_AUG13DEMO.csv'
-    for i in tqdm(range(1, 2319)):
-        start_time = time.time()
-        MFCC = load_wav_into_tensor(f"../data/demo_recordings/recording{i}.wav")
-        MFCC = MFCC.reshape([1, 32, 937]).to(dtype=torch.float32)
-        label_idx = AudioModel.predict(MFCC)
-        end_time = time.time()
-
-        audio_time = int(os.path.getctime(f"../data/demo_recordings/recording{i}.wav"))
-        
-        labels = ["NormalSleep", "Hypopnea", "Snore", "ObstructiveApnea", "MixedApnea"]
-        label = labels[label_idx]
-
-        # print(f"Reading No. {i}; {audio_time:.2f}; {label}")
-        log_to_csv(audio_time, label, logpath)
         

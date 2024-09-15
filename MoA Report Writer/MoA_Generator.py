@@ -96,14 +96,11 @@ class MoAAgent:
         return result
 
 
-def generate_markdown_reports(client, model_name, silent=True):
+def generate_markdown_reports(client, model_name, silent=True, num_agents = 2):
     other_tokens = 0
 
     agents = [
-        LLMConfig(model_name, 0.55),
-        LLMConfig(model_name, 0.5),
-        LLMConfig(model_name, 0.45),
-        LLMConfig(model_name, 0.4)
+        LLMConfig(model_name, 0.5) for _ in range(num_agents)
     ]
 
     agent = MoAAgent(

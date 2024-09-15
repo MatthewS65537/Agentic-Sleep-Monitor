@@ -5,12 +5,12 @@ import openai
 from main import generate_markdown_reports, DataPool, template
 from evaluator import EvalAgent
 
-def evaluate_reports(ollama_client, ollama_model_name, openai_client, openai_model_name):    
+def evaluate_reports(ollama_client, ollama_model_name, openai_client, openai_model_name, num_agents=2):
     # Instantiate the evaluation agent
     evaluator = EvalAgent(openai_client, openai_model_name)
     
     # Generate the reports
-    reports = generate_markdown_reports(ollama_client, ollama_model_name)
+    reports = generate_markdown_reports(ollama_client, ollama_model_name, num_agents)
     
     # Extract the final response to be evaluated
     final_response = reports.get('checked_final_response')
@@ -31,12 +31,13 @@ def evaluate_reports(ollama_client, ollama_model_name, openai_client, openai_mod
     return results
 
 if __name__ == "__main__":
+    num_agents = 2
     # Initialize Ollama client
     ollama_client = openai.OpenAI(base_url="http://localhost:11434/v1", api_key="ollama")
     ollama_model_names = [
         # "gemma2:2b",
-        "phi3.5:latest",
-        # "qwen2:1.5b"
+        # "phi3.5:latest",
+        "qwen2:1.5b"
     ]
 
     openai_client = openai.OpenAI(base_url=os.getenv("HOLDAI_URL"), api_key=os.getenv("HOLDAI_API_KEY"))
@@ -48,8 +49,8 @@ if __name__ == "__main__":
         }
         print(f"Evaluating {model}")
         for i in tqdm(range(10)):
-            res_dict = evaluate_reports(ollama_client, model, openai_client, openai_model_name)
+            res_dict = evaluate_reports(ollama_client, model, openai_client, openai_model_name, num_agents)
             results[model].append(res_dict)
-        with open(f'local_evaluation_results_{model}.pkl', 'wb') as f:
+        with open(f'./results/open_evaluation_results_MoA_{num_agents}_{model}.pkl', 'wb') as f:
             pickle.dump(results, f)
     
