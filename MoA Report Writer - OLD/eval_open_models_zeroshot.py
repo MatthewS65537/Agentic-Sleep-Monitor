@@ -61,15 +61,15 @@ def generate_markdown_report(client, model_name, silent=True):
         "You will be demoted for dereliction of duty if you do not replace ALL {bracketed} information "
         "with your own content. Be SPECIFIC and aim to PERSONALIZE your report, rather than give general advice. More is better. "
         "Do not mention common knowledge or anything that is not tied to specific things in the data. "
-        "Do not give template-style responses like [Mention possible diseases] or [Mention possible treatments].\n"
-        f"Here are the sleep stats for a patient. Help write a concise report of the patient's sleep health based on the data provided:\n{DataPool}\n"
-        f"Remember your job. Please strictly adhere to this markdown template (do not add any other information or titles, etc.):\n{template}"
+        "Do not give template-style responses like [Mention possible diseases] or [Mention possible treatments]."
     )
 
     response = client.chat.completions.create(
         model=model_name,
         messages=[{"role": "user", "content": prompt}],
+        temperature=0.5,
         max_tokens=2048,
+        stream=False
     )
 
     total_tokens = response.usage.total_tokens  # Compute total tokens used
@@ -84,12 +84,16 @@ def generate_markdown_report(client, model_name, silent=True):
     }
 
 if __name__ == "__main__":
-    client = openai.OpenAI(base_url=os.getenv("HOLDAI_URL"), api_key=os.getenv("HOLDAI_GLOBAL_KEY"))
-    models = ["gpt-4o-2024-08-06", "gpt-4o-mini", "claude-3-5-sonnet", "o1-preview", "o1-mini"]
+    client = openai.OpenAI(base_url="http://localhost:11434/v1", api_key="ollama")
+    models = ["gemma2:2b", "qwen2:1.5b", "phi3.5:latest"]
+    # models = ["phi3.5:latest"]
     
-    evaluator = EvalAgent(openai.OpenAI(base_url=os.getenv("HOLDAI_URL"), api_key=os.getenv("HOLDAI_AZURE_KEY")), "gpt-4o-2024-08-06")
+    evaluator = EvalAgent(openai.OpenAI(base_url=os.getenv("HOLDAI_URL"), api_key=os.getenv("HOLDAI_API_KEY")), "gpt-4o-2024-08-06")
 
     for model in models:
+        avg_rating = 0
+        avg_tokens = 0
+
         results = {
             model: []
         }
@@ -102,6 +106,15 @@ if __name__ == "__main__":
                 "total_tokens": final_response['total_tokens']
             }
             results[model].append(result)
+
+            avg_rating += ratings['Accuracy'] + ratings['Relevancy'] + ratings['Clarity'] + ratings['Style']
+            avg_tokens += final_response['total_tokens']
+
+        avg_rating /= 40
+        avg_tokens /= 10
+
+        print(f"Average rating for {model}: {avg_rating}")
+        print(f"Average tokens for {model}: {avg_tokens}")
             
-        with open(f'./results/closed_evaluation_results_{model}.pkl', 'wb') as f:
+        with open(f'./results/open_evaluation_results_zeroshot_{model}.pkl', 'wb') as f:
             pickle.dump(results, f)

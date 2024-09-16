@@ -1,27 +1,32 @@
 import os
+import ell
 import openai
-from typing import List, Dict
+from AutoClient import *
+from content import *
 
-class EvalAgent:
-    def __init__(self, client, model_name):
-        self.client = client
-        self.model_name = model_name
+ell.init(store='./logdir', autocommit=True)
 
-    def evaluate_response(self, response: str, data: str, template: str) -> Dict[str, int]:
+def evaluate_report(model: str, response: str, data: dict, template: str):
+    @ell.simple(
+        model=model.split("/")[-1],
+        client=auto_client(model),
+        temperature=0.1,
+        max_tokens=200,
+    )
+    def evaluate_report_(response: str, data: dict, template: str):
         """
-        Evaluates a single response based on provided data and template using OpenAI's API.
+        Evaluate a single report based on provided data and template.
 
         Args:
-            response (str): The response text to evaluate.
-            data (str): The relevant data for evaluation.
-            template (str): The template to which the response should conform.
+            report (str): The report text to evaluate.
+            data (dict): The relevant data for evaluation.
+            template (str): The template to which the report should conform.
 
         Returns:
             Dict[str, int]: A dictionary containing ratings for each evaluation category.
         """
-        prompt = f"""
-        Evaluate the following response based on the given data and template. Rate each category on a scale of 0 (worst) to 10 (best):
-
+        return [ell.user(f"""Evaluate the following report based on the given data and template. Rate each category on a scale of 0 (worst) to 10 (best):
+                    
         Data: {data}
         Template: {template}
         Response: {response}
@@ -53,41 +58,9 @@ class EvalAgent:
         Accuracy: [rating]
         Clarity: [rating]
         Relevancy: [rating]
-        Style: [rating]
-        """
+        Style: [rating]""")]
+    
+    return evaluate_report_(response, data, template)
 
-        completion = self.client.chat.completions.create(
-            model=self.model_name,
-            messages=[
-                {"role": "user", "content": prompt}
-            ],
-            max_tokens=200,
-            temperature=0.25,
-        )
-
-        # Extract ratings from the response
-        ratings = {}
-        for line in completion.choices[0].message.content.split('\n'):
-            if ':' in line:
-                category, rating = line.split(':')
-                ratings[category.strip()] = int(rating.strip())
-
-        return ratings
-
-    def evaluate_multiple_responses(self, responses: List[str], data: str, template: str) -> List[Dict[str, int]]:
-        """
-        Evaluates multiple responses based on provided data and template.
-
-        Args:
-            responses (List[str]): A list of response texts to evaluate.
-            data (str): The relevant data for evaluation.
-            template (str): The template to which responses should conform.
-
-        Returns:
-            List[Dict[str, int]]: A list of dictionaries containing ratings for each response.
-        """
-        evaluations = []
-        for response in responses:
-            evaluation = self.evaluate_response(response, data, template)
-            evaluations.append(evaluation)
-        return evaluations
+if __name__ == "__main__":
+    print(evaluate_report("gpt-4o-2024-08-06", report, data, template))

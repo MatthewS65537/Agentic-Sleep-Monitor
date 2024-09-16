@@ -2,7 +2,7 @@ from tqdm import tqdm
 import pickle
 import os
 import openai
-from main import generate_markdown_reports, DataPool, template
+from MoA_Generator import generate_markdown_reports, DataPool, template
 from evaluator import EvalAgent
 
 def evaluate_reports(ollama_client, ollama_model_name, openai_client, openai_model_name, num_agents=2):
@@ -31,11 +31,11 @@ def evaluate_reports(ollama_client, ollama_model_name, openai_client, openai_mod
     return results
 
 if __name__ == "__main__":
-    num_agents = 2
+    num_agents = 5
     # Initialize Ollama client
     ollama_client = openai.OpenAI(base_url="http://localhost:11434/v1", api_key="ollama")
     ollama_model_names = [
-        # "gemma2:2b",
+        "gemma2:2b",
         # "phi3.5:latest",
         "qwen2:1.5b"
     ]
@@ -51,6 +51,6 @@ if __name__ == "__main__":
         for i in tqdm(range(10)):
             res_dict = evaluate_reports(ollama_client, model, openai_client, openai_model_name, num_agents)
             results[model].append(res_dict)
-        with open(f'./results/open_evaluation_results_MoA_{num_agents}_{model}.pkl', 'wb') as f:
+        with open(f'./results/local_evaluation_results_MoA_{num_agents}_{model}.pkl', 'wb') as f:
             pickle.dump(results, f)
     
