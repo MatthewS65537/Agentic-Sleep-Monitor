@@ -1,6 +1,7 @@
 import os
 import openai
 
+# azure_client = openai.OpenAI(base_url="https://api.xiaoai.plus/v1", api_key=os.getenv("XIAOAI_KEY"))
 azure_client = openai.OpenAI(base_url="https://api.holdai.top/v1", api_key=os.getenv("HOLDAI_AZURE_KEY"))
 anthropic_client = openai.OpenAI(base_url="https://api.holdai.top/v1", api_key=os.getenv("HOLDAI_CLAUDE_KEY"))
 o1_client = openai.OpenAI(base_url="https://api.holdai.top/v1", api_key=os.getenv("HOLDAI_O1_KEY"))

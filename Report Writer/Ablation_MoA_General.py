@@ -175,6 +175,18 @@ if __name__ == "__main__":
         "claude-3-5-sonnet @ MoA 8",
     ]
 
+    models_qwen25 = [
+        "qwen2.5:3b-instruct @ 1Pass",
+        "qwen2.5:3b-instruct @ MoA 1",
+        "qwen2.5:3b-instruct @ MoA 2",
+        "qwen2.5:3b-instruct @ MoA 3",
+        "qwen2.5:3b-instruct @ MoA 4",
+        "qwen2.5:3b-instruct @ MoA 5",
+        "qwen2.5:3b-instruct @ MoA 6",
+        # "qwen2.5:3b-instruct @ MoA 7",
+        # "qwen2.5:3b-instruct @ MoA 8",
+    ]
+
     names = [
         "1Pass",
         "MoA 1",
@@ -192,3 +204,4 @@ if __name__ == "__main__":
     plot_moa_performance(models_4o_mini, names, "./graphs/GPT4o_mini_MoA_Performance.png", "GPT-4o-Mini Performance Across MoA Iterations", lower_y=6.5, upper_y=9.5)
     plot_moa_performance(models_gemma2, names, "./graphs/Gemma2_MoA_Performance.png", "Gemma2-2b Performance Across MoA Iterations", lower_y=5, upper_y=8.5)
     plot_moa_performance(models_claude35, names, "./graphs/Claude35Sonnet_MoA_Performance.png", "Claude 3.5 Sonnet Performance Across MoA Iterations", lower_y=6.5, upper_y=9.5)
+    plot_moa_performance(models_qwen25, names[:7], "./graphs/Qwen25_MoA_Performance.png", "Qwen2.5-3b Performance Across MoA Iterations", lower_y=6.5, upper_y=9.5)
