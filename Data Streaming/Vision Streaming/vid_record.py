@@ -22,12 +22,12 @@ def save_recording(path, frame):
 
     print(f"Saved recording: {path}")
 
-    url = 'http://127.0.0.1:5000/vision/post_jpg'
-    data = {
-        'vision_string': f"{path.split('/')[-1]}",
-        'timestamp' : time.time()
-    }
-    response = requests.post(url, json=data)
+    # url = 'http://127.0.0.1:5000/vision/post_jpg'
+    # data = {
+    #     'vision_string': f"{path.split('/')[-1]}",
+    #     'timestamp' : time.time()
+    # }
+    # response = requests.post(url, json=data)
 
     return
 
@@ -40,7 +40,7 @@ if __name__ == "__main__":
             break
     
     save_dir = "../../data/images"
-    interval = 5
+    interval = 1
     ensure_dir(save_dir)
     cap = cv2.VideoCapture(camera_idx)
 

@@ -1,0 +1,2 @@
+Model,Experiment,Accuracy,Accuracy CI,Accuracy StdDev,Accuracy StdErr,Clarity,Clarity CI,Clarity StdDev,Clarity StdErr,Relevancy,Relevancy CI,Relevancy StdDev,Relevancy StdErr,Style,Style CI,Style StdDev,Style StdErr,Average,Average CI,Average StdDev,Average StdErr
+claude-3-opus,1Pass,7.38,0.38,0.50,0.17,8.38,0.38,0.50,0.17,8.25,0.37,0.49,0.16,9.25,0.37,0.49,0.16,8.31,0.36,0.47,0.16

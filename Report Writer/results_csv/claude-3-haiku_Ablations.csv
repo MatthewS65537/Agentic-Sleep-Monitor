@@ -1,0 +1,2 @@
+Model,Experiment,Accuracy,Accuracy CI,Accuracy StdDev,Accuracy StdErr,Clarity,Clarity CI,Clarity StdDev,Clarity StdErr,Relevancy,Relevancy CI,Relevancy StdDev,Relevancy StdErr,Style,Style CI,Style StdDev,Style StdErr,Average,Average CI,Average StdDev,Average StdErr
+claude-3-haiku,1Pass,6.88,0.41,0.54,0.18,8.00,0.48,0.63,0.21,8.25,0.30,0.40,0.13,8.88,0.41,0.54,0.18,8.00,0.33,0.43,0.14

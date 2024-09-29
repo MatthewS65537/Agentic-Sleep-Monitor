@@ -1,0 +1,2 @@
+Model,Experiment,Accuracy,Accuracy CI,Accuracy StdDev,Accuracy StdErr,Clarity,Clarity CI,Clarity StdDev,Clarity StdErr,Relevancy,Relevancy CI,Relevancy StdDev,Relevancy StdErr,Style,Style CI,Style StdDev,Style StdErr,Average,Average CI,Average StdDev,Average StdErr
+o1-mini,1Pass,6.75,0.88,1.17,0.39,7.62,1.07,1.42,0.47,7.25,1.40,1.86,0.62,9.25,0.68,0.90,0.30,7.72,0.96,1.27,0.42

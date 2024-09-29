@@ -1,0 +1,15 @@
+Model,Accuracy,Clarity,Relevancy,Style,Quality,Average
+Gemma 2-2B @ 1Pass,5.5,6.6,6.0,8.0,6.03,6.53
+Gemma 2-2B @ MoA 1,7.0,7.7,8.0,6.8,7.57,7.38
+Qwen 2.5-3B @ 1Pass,7.2,7.8,7.4,7.2,7.47,7.4
+Qwen 2.5-3B @ MoA 5,7.2,7.9,8.1,9.0,7.73,8.05
+GPT-4o-Mini @ 1Pass,6.1,7.1,7.0,8.7,6.73,7.22
+GPT-4o @ 1Pass,6.6,7.7,8.0,9.3,7.43,7.9
+O1-Mini @ 1Pass,6.8,7.7,7.5,9.3,7.33,7.83
+O1-Preview @ 1Pass,7.0,7.9,8.1,9.5,7.67,8.12
+Claude 3 Haiku @ 1Pass,6.9,8.0,8.2,8.9,7.7,8.0
+Claude 3 Sonnet @ 1Pass,7.6,8.3,8.2,9.3,8.03,8.35
+Claude 3 Opus @ 1Pass,7.5,8.5,8.4,9.4,8.13,8.45
+Claude 3.5 Sonnet @ 1Pass,7.0,8.0,8.0,9.1,7.67,8.03
+Gemini 1.5 Flash @ 1Pass,7.3,8.2,8.2,9.1,7.9,8.2
+Gemini 1.5 Pro @ 1Pass,7.0,8.0,8.0,9.1,7.67,8.03
