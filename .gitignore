@@ -15,3 +15,5 @@ Django/db.sqlite3
 Monitors/Audio Monitor/plots/labels_presence_over_time.png
 Monitors/Audio Monitor/audio_classification_log.csv
 MoA Report Writer/results
+Backend/data
+Backend/model_checkpoints
