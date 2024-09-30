@@ -20,11 +20,11 @@ FLASK_PID=$!
 sleep 2
 
 # Run audio recording
-python3 "Data Streaming/Audio Streaming/audio_record.py" --silent &
-AUDIO_RECORD_PID=$!
+# python3 "Data Streaming/Audio Streaming/audio_record.py" --silent &
+# AUDIO_RECORD_PID=$!
 
 # Run Inference Engine
-python3 "Inference Engine/InferenceBackend.py" --engine "Lightning" &
+python3 "Inference Engine/InferenceBackend.py" --engine "Lightning" --live &
 INFERENCE_ENGINE_PID=$!
 
 echo "[Backend/run.sh] All processes started. Press Ctrl+C to stop."

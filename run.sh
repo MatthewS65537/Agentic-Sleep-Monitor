@@ -1,5 +1,15 @@
 #!/bin/bash
 
+# Parse command line arguments
+DEMO=false
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        --demo) DEMO=true; shift ;;
+        *) echo "Unknown parameter passed: $1"; exit 1 ;;
+    esac
+    shift
+done
+
 # Function to kill all background processes
 cleanup() {
     echo "[MASTER/run.sh] Stopping all processes..."
@@ -13,6 +23,12 @@ cleanup() {
     exit
 }
 
+if [ "$DEMO" = true ] ; then
+    echo "[MASTER/run.sh] Running in demo mode"
+else
+    echo "[MASTER/run.sh] Running in live mode"
+fi
+
 # Set up trap to catch SIGINT (Ctrl+C)
 trap cleanup SIGINT
 
@@ -25,11 +41,19 @@ FLASK_PID=$!
 sleep 2
 
 # Run audio recording
-python3 "Data Streaming/Audio Streaming/audio_record.py" --silent &
+if [ "$DEMO" = true ] ; then
+    python3 "request_generator.py" &
+else
+    python3 "Data Streaming/Audio Streaming/audio_record.py" --silent &
+fi
 AUDIO_RECORD_PID=$!
 
 # Run Inference Engine
-python3 "Inference Engine/InferenceBackend.py" --engine "Lightning" &
+if [ "$DEMO" = true ] ; then
+    python3 "Inference Engine/InferenceBackend.py" --engine "ANE" &
+else
+    python3 "Inference Engine/InferenceBackend.py" --engine "ANE" --live &
+fi
 INFERENCE_ENGINE_PID=$!
 
 echo "[Master/run.sh] Backend processes started. Press Ctrl+C to stop."

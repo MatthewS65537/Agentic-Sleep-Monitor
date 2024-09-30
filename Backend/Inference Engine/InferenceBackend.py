@@ -9,19 +9,21 @@ from datetime import datetime
 import warnings
 warnings.filterwarnings("ignore")
 
-# Argument parser for front and backend URLs
-parser = argparse.ArgumentParser(description='Inference Backend for Audio and Vision')
-parser.add_argument('--backend_url', type=str, default="http://127.0.0.1:5000", help='Backend server URL')
-parser.add_argument('--data_path', type=str, default="./data/", help='Path to data')
-parser.add_argument('--engine', type=str, default="Lightning", help='Inference engine to use')
-
 def get_audio():
-    response = requests.get(f"{args.backend_url}/audio/get_wav")
-    return response.json()
+    try:
+        response = requests.get(f"{args.backend_url}/audio/get_wav")
+        return response.json()
+    except requests.exceptions.ConnectionError:
+        print("ConnectionError: Unable to connect to the backend server.")
+        exit(1)
 
 def get_vision():
-    response = requests.get(f"{args.backend_url}/vision/get_jpg")
-    return response.json()
+    try:
+        response = requests.get(f"{args.backend_url}/vision/get_jpg")
+        return response.json()
+    except requests.exceptions.ConnectionError:
+        print("ConnectionError: Unable to connect to the backend server.")
+        exit(1)
 
 def log_audio(csv_writer, tstamp, prediction):
     """Log the timestamp and prediction to the audio CSV file."""
@@ -34,6 +36,12 @@ def log_vision(csv_writer, tstamp, prediction):
     # Removed flush() as it is not a valid method for csv.writer
 
 if __name__ == "__main__":
+    # Argument parser for front and backend URLs
+    parser = argparse.ArgumentParser(description='Inference Backend for Audio and Vision')
+    parser.add_argument('--backend_url', type=str, default="http://127.0.0.1:5000", help='Backend server URL')
+    parser.add_argument('--data_path', type=str, default="./data/", help='Path to data')
+    parser.add_argument('--engine', type=str, default="Lightning", help='Inference engine to use')
+    parser.add_argument('--live', action="store_true", help='Run the inference engine in live mode')
     args = parser.parse_args()  # Moved argparser to the main loop
 
     audio_engine = AudioEngine(
@@ -62,20 +70,25 @@ if __name__ == "__main__":
     # vision_csv_writer.writerow(['Timestamp', 'Prediction'])  # Write header
 
     while True:
-        wav = get_audio()
-        msg = wav['info']
-        if not msg == "Queue is empty":
-            tstamp = wav['timestamp']
-            prediction = audio_engine.predict(args.data_path + 'audio/' + msg)
-            print(f"[Backend/Inference Engine]{{Audio}} {prediction}")
+        try:
+            wav = get_audio()
+            msg = wav['info']
+            if not msg == "Queue is empty":
+                tstamp = wav['timestamp']
+                prediction = audio_engine.predict(args.data_path + 'audio/' + msg)
+                print(f"[Backend/Inference Engine]{{Audio}} {prediction}")
 
-            # Log the timestamp and prediction to the audio CSV file
-            audio_csv_file = open(audio_csv_file_path, mode='a', newline='')
-            audio_csv_writer = csv.writer(audio_csv_file)
-            log_audio(audio_csv_writer, tstamp, prediction)
-            # Manually flush to ensure data is written
-            audio_csv_file.close()
+                # Log the timestamp and prediction to the audio CSV file
+                audio_csv_file = open(audio_csv_file_path, mode='a', newline='')
+                audio_csv_writer = csv.writer(audio_csv_file)
+                log_audio(audio_csv_writer, tstamp, prediction)
+                # Manually flush to ensure data is written
+                audio_csv_file.close()
 
-        # TODO: VISION COMPONENT
+            # TODO: VISION COMPONENT
 
-        time.sleep(5)
+            if args.live:
+                time.sleep(5)
+        except requests.exceptions.ConnectionError:
+            print("ConnectionError: Unable to connect to the backend server.")
+            exit(1)
