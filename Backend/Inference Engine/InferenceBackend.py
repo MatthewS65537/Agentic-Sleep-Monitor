@@ -67,7 +67,7 @@ if __name__ == "__main__":
         if not msg == "Queue is empty":
             tstamp = wav['timestamp']
             prediction = audio_engine.predict(args.data_path + 'audio/' + msg)
-            print(prediction)
+            print(f"[Backend/Inference Engine]{{Audio}} {prediction}")
 
             # Log the timestamp and prediction to the audio CSV file
             audio_csv_file = open(audio_csv_file_path, mode='a', newline='')

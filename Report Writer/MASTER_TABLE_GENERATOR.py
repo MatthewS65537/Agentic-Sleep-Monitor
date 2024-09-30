@@ -5,7 +5,12 @@ from tqdm import tqdm
 from local_ablations.Ablation_Defines import names, colors
 
 models = [
+    ("qwen2.5_0.5b-instruct", "Qwen 2.5 0.5B Instruct", "./gdrive_results", True),
+    ("qwen2.5_1.5b-instruct", "Qwen 2.5 1.5B Instruct", "./gdrive_results", True),
     ("qwen2.5_3b-instruct", "Qwen 2.5 3B Instruct", "./gdrive_results", True),
+    ("gemma2_2b", "Gemma 2 2B Instruct", "./gdrive_results", True),
+    ("llama3.2_1b-instruct-q4_0", "Llama 3.2 1B Instruct", "./gdrive_results", True),
+    ("llama3.2_3b-instruct-q4_0", "Llama 3.2 3B Instruct", "./gdrive_results", True),
     ("gpt-4o-mini", "GPT-4o Mini", "./results", False),
     ("gpt-4o-2024-08-06", "GPT-4o", "./results", False),
     ("claude-3-5-sonnet", "Claude 3.5 Sonnet", "./results", False), # END OF MOA Models

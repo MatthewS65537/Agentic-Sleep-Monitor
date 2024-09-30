@@ -19,3 +19,4 @@ Backend/data
 Backend/model_checkpoints
 Backend/results
 Report Writer/GDriveResultsVisualization.ipynb
+Report Writer/ReportWriterVisualization.ipynb

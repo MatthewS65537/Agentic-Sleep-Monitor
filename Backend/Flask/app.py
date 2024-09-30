@@ -48,4 +48,4 @@ def get_jpg():
     return jsonify({'info': vision_string, 'timestamp' : timestamp}), 200
 
 if __name__ == '__main__':
-    app.run(debug=True, threaded=False)
+    app.run(debug=False, threaded=False)
