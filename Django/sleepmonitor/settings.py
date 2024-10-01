@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "report",
+    'dataview',
 ]
 
 MIDDLEWARE = [
@@ -84,6 +85,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'main', 'static'),
     os.path.join(BASE_DIR, 'datastream', 'static'),
     os.path.join(BASE_DIR, 'report', 'static'), 
+    os.path.join(BASE_DIR, 'dataview', 'static'),
 ]
 
 # Database

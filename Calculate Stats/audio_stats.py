@@ -1,100 +1,86 @@
 import numpy as np
+from datetime import datetime
 import csv
-from datetime import datetime, timedelta
+from typing import List, Dict, Tuple
 
-def read_sleep_data(file_path):
-    sleep_data = []
-    
+def read_csv_data(file_path: str) -> Tuple[List[float], List[str]]:
+    timestamps = []
+    predictions = []
     with open(file_path, 'r') as csvfile:
-        csv_reader = csv.DictReader(csvfile)
-        
-        for row in csv_reader:
-            timestamp = int(row['Timestamp'])
-            label = row['Label']
-            
-            # Convert timestamp to datetime object
-            date_time = datetime.fromtimestamp(timestamp)
-            
-            sleep_data.append({
-                'timestamp': timestamp,
-                'datetime': date_time,
-                'label': label
-            })
+        csvreader = csv.reader(csvfile)
+        next(csvreader)  # Skip header
+        for row in csvreader:
+            timestamps.append(float(row[0]))
+            predictions.append(row[1])
+    return timestamps, predictions
+
+def create_sleep_state_mappings() -> Tuple[Dict[str, int], Dict[int, str]]:
+    sleep_states = {
+        "NormalSleep": 0,
+        "Hypopnea": 1,
+        "Snore": 2,
+        "ObstructiveApnea": 3,
+        "MixedApnea": 4
+    }
+    id_name = {v: k for k, v in sleep_states.items()}
+    return sleep_states, id_name
+
+def create_prefix_array(sleep_state_numeric: List[int], num_states: int) -> np.ndarray:
+    prefix_array = np.zeros((num_states, len(sleep_state_numeric)))
+    for i, state in enumerate(sleep_state_numeric):
+        if i > 0:
+            prefix_array[:, i] = prefix_array[:, i-1]
+        prefix_array[state, i] += 1
+    return prefix_array
+
+def query_prefix_array(prefix_array: np.ndarray, state: int, start_time: float, end_time: float, timestamps: List[float]) -> int:
+    start_index = next((i for i, ts in enumerate(timestamps) if ts >= start_time), None)
+    end_index = next((i for i, ts in enumerate(timestamps) if ts > end_time), None)
+
+    if start_index is None or (end_index is not None and end_index <= start_index):
+        return 0  # No valid range found
+
+    if end_index is None:
+        end_index = len(timestamps)  # Query until the end if no end_time is specified
+
+    return prefix_array[state, end_index - 1] - (prefix_array[state, start_index - 1] if start_index > 0 else 0)
+
+def compute_ahi(total_apneas: int, total_hypopneas: int, total_hours: float) -> float:
+    if total_hours == 0:
+        return 0  # Avoid division by zero
+    return (total_apneas + total_hypopneas) / total_hours
+
+def calculate_audio_stats() -> Dict[str, float]:
+    file_path = './results/audio/audio_DEMO.csv'
+    timestamps, predictions = read_csv_data(file_path)
     
-    return sleep_data
-
-# Usage
-file_path = '../data/audio_logs/audio_classification_log_AUG13DEMO.csv'  # Replace with your actual file path
-sleep_data = read_sleep_data(file_path)
-
-import matplotlib.pyplot as plt
-from collections import Counter
-
-def create_sleep_graph(sleep_data):
-    # Sort sleep_data by timestamp
-    sleep_data.sort(key=lambda x: x['timestamp'])
-
-    # Get the start and end times, rounded to the nearest hour
-    start_time = sleep_data[0]['datetime'].replace(minute=0, second=0, microsecond=0)
-    end_time = sleep_data[-1]['datetime'].replace(minute=0, second=0, microsecond=0) + timedelta(hours=1)
-
-    # Create hourly bins
-    hourly_bins = [start_time + timedelta(hours=i) for i in range(int((end_time - start_time).total_seconds() / 3600) + 1)]
-
-    # Extract timestamps and labels
-    timestamps = [entry['datetime'] for entry in sleep_data]
-    labels = [entry['label'] for entry in sleep_data]
-
-    # Create a dictionary to count occurrences of each label per hour
-    hourly_counts = {label: [0] * len(hourly_bins) for label in set(labels)}
-
-    for timestamp, label in zip(timestamps, labels):
-        hour_index = int((timestamp - start_time).total_seconds() / 3600)
-        hourly_counts[label][hour_index] += 1
-
-    # Find the first and last non-zero hours
-    first_hour = min(next(i for i, count in enumerate(sum(hourly_counts.values(), [])) if count > 0), 0)
-    last_hour = max(len(sum(hourly_counts.values(), [])) - next(i for i, count in enumerate(reversed(sum(hourly_counts.values(), []))) if count > 0) - 1, first_hour + 1)
-
-    # Slice the data to focus only on hours with data
-    hourly_bins = hourly_bins[first_hour:last_hour+1]
-    for label in hourly_counts:
-        hourly_counts[label] = hourly_counts[label][first_hour:last_hour+1]
-
-    # Create the stacked histogram
-    plt.figure(figsize=(15, 6))
+    sleep_states, id_name = create_sleep_state_mappings()
+    sleep_state_numeric = [sleep_states[pred] for pred in predictions]
     
-    # Define custom colors
-    color_map = {
-        'NormalSleep': 'gray',
-        'ObstructiveApnea': 'red',
-        'Hypopnea': 'black',
-        'Snore': 'blue',
-        'MixedApnea': 'orange'
+    prefix_array = create_prefix_array(sleep_state_numeric, len(sleep_states))
+    
+    total_instances = {id_name[i]: prefix_array[i, -1] for i in range(len(sleep_states))}
+    
+    total_apneas = total_instances.get("ObstructiveApnea", 0)
+    total_hypopneas = total_instances.get("Hypopnea", 0)
+    total_hours = len(timestamps) / 360  # Time stamps are 10 seconds each
+    
+    ahi = compute_ahi(total_apneas, total_hypopneas, total_hours)
+    
+    total_apnea_events = total_instances.get("ObstructiveApnea", 0)
+    total_snoring_episodes = total_instances.get("Snore", 0)
+    total_snoring_time = total_snoring_episodes * 10
+    
+    result = {
+        "event_distribution": total_instances,
+        "AHI": ahi,
+        "total_apnea_events": total_apnea_events,
+        "total_snoring_episodes": total_snoring_episodes,
+        "total_snoring_time": total_snoring_time
     }
     
-    bottom = np.zeros(len(hourly_bins))
-    for label, counts in hourly_counts.items():
-        plt.bar(np.arange(len(hourly_bins)), counts, bottom=bottom, 
-                label=label, color=color_map.get(label, 'gray'))
-        bottom += counts
+    return result
 
-    plt.xlabel('Time')
-    plt.ylabel('Count')
-    plt.title('Sleep Pattern Over Time')
-    plt.legend()
-
-    # Set x-axis ticks to show every hour
-    tick_locations = range(0, len(hourly_bins))
-    tick_labels = [hourly_bins[i].strftime('%Y-%m-%d %H:%M') for i in tick_locations]
-    plt.xticks(tick_locations, tick_labels, rotation=45, ha='right')
-
-    plt.tight_layout()
-
-    # Save the graph
-    plt.savefig('../data/sleep_pattern_graph.png')
-    plt.close()
-
-# Create and save the graph
-create_sleep_graph(sleep_data)
-print("Sleep pattern graph has been saved as 'sleep_pattern_graph.png' in the data directory.")
+if __name__ == "__main__":
+    print(calculate_audio_stats())
+    

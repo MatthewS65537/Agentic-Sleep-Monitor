@@ -11,16 +11,16 @@ models = [
     ("gemma2_2b", "Gemma 2 2B Instruct", "./gdrive_results", True),
     ("llama3.2_1b-instruct-q4_0", "Llama 3.2 1B Instruct", "./gdrive_results", True),
     ("llama3.2_3b-instruct-q4_0", "Llama 3.2 3B Instruct", "./gdrive_results", True),
-    ("gpt-4o-mini", "GPT-4o Mini", "./results", False),
-    ("gpt-4o-2024-08-06", "GPT-4o", "./results", False),
-    ("claude-3-5-sonnet", "Claude 3.5 Sonnet", "./results", False), # END OF MOA Models
+    ("gpt-4o-mini", "GPT-4o Mini", "./results", True),
+    ("gpt-4o-2024-08-06", "GPT-4o", "./results", True),
+    ("claude-3-5-sonnet", "Claude 3.5 Sonnet", "./results", True), # END OF MOA Models
     ("o1-mini", "O1 Mini", "./results", False),
     ("o1-preview", "O1 Preview", "./results", False),
     ("claude-3-haiku", "Claude 3 Haiku", "./results", False),
     ("claude-3-sonnet", "Claude 3 Sonnet", "./results", False),
     ("claude-3-opus", "Claude 3 Opus", "./results", False),
-    # ("gemini-1.5-flash", "Gemini 1.5 Pro", "./results", False),
-    # ("gemini-1.5-pro", "Gemini 1.5 Pro", "./results", False),
+    ("gemini-1.5-flash", "Gemini 1.5 Pro", "./results", False),
+    ("gemini-1.5-pro", "Gemini 1.5 Flash", "./results", False),
 ]
 
 exp_settings = [
@@ -124,7 +124,7 @@ latex_table = """\\begin{table*}[h]
 \\hline
 \\textbf{Model} & \\textbf{Accuracy} & \\textbf{Clarity} & \\textbf{Relevance} & \\textbf{Style} & \\textbf{Quality} & \\textbf{Overall} \\\\ \\hline\n"""
 
-format_arrow = lambda base, now: "\color{green!50!black}{\\; \\blacktriangle " if now > base else ("\color{red!50!black}{\\; \\blacktriangledown " if now < base else "\color{gray}{\\; \\approx}")
+format_arrow = lambda base, now: "\color{green!50!black}{\\; \\blacktriangle " if now > base else ("\color{red!50!black}{\\; \\blacktriangledown " if now < base else "\color{gray}{\\; \\approx ")
 calculate_delta = lambda base, now: abs(round(now - base, 2))
 arrow_entry = lambda base, now: format_arrow(base, now) + str(calculate_delta(base, now)).format("{:0.2f}") + "} \\color{" + "black" + "}"
 

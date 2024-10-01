@@ -14,9 +14,9 @@ models = [
     ("gemma2_2b", "Gemma 2 2B Instruct", "./gdrive_results", True),
     ("llama3.2_1b-instruct-q4_0", "Llama 3.2 1B Instruct", "./gdrive_results", True),
     ("llama3.2_3b-instruct-q4_0", "Llama 3.2 3B Instruct", "./gdrive_results", True),
-    ("gpt-4o-mini", "GPT-4o Mini", "./results", False),
-    ("gpt-4o-2024-08-06", "GPT-4o", "./results", False),
-    ("claude-3-5-sonnet", "Claude 3.5 Sonnet", "./results", False), # END OF MOA Models
+    ("gpt-4o-mini", "GPT-4o Mini", "./results", True),
+    ("gpt-4o-2024-08-06", "GPT-4o", "./results", True),
+    ("claude-3-5-sonnet", "Claude 3.5 Sonnet", "./results", True), # END OF MOA Models
     ("o1-mini", "O1 Mini", "./results", False),
     ("o1-preview", "O1 Preview", "./results", False),
     ("claude-3-haiku", "Claude 3 Haiku", "./results", False),
@@ -130,7 +130,7 @@ for model_prefix, name, path, use_MoA in tqdm(models):
 
     if use_MoA:
         # Create violin plot
-        fig, ax = plt.subplots(figsize=(12, 6))
+        fig, ax = plt.subplots(figsize=(9, 3))
         parts = ax.violinplot(all_avg_data, showmeans=True, showextrema=True, showmedians=True)
 
         # Customize the violin plot
@@ -153,7 +153,7 @@ for model_prefix, name, path, use_MoA in tqdm(models):
         ax.set_xticklabels(exp_settings, rotation=45, ha='right')
 
         # Set y-axis limits
-        ax.set_ylim(0, 10)
+        ax.set_ylim(7.5, 9)
 
         # Add grid
         ax.yaxis.grid(True, linestyle='--', which='major', color='grey', alpha=.25)

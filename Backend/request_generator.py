@@ -14,11 +14,11 @@ audio_files = sorted(audio_files, key=lambda x : int(x.split('.')[0][9:]))
 
 st_time = time.time()
 # Send audio requests for each file in the directory
-for i, audio_file in enumerate(audio_files[:100]):
+for i, audio_file in enumerate(audio_files):
     print(f"Sending audio request for {audio_file}")
     audio_data = {
         "audio_string": audio_file,
-        "timestamp": time.time() + i * 10000
+        "timestamp": time.time() + i * 10
     }
     response = requests.post(f"{base_url}/audio/post_wav", json=audio_data)
     print(f"Audio POST response: {response.json()}")

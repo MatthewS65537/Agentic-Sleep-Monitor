@@ -1,2 +1,10 @@
 Model,Experiment,Accuracy,Accuracy CI,Accuracy StdDev,Accuracy StdErr,Clarity,Clarity CI,Clarity StdDev,Clarity StdErr,Relevancy,Relevancy CI,Relevancy StdDev,Relevancy StdErr,Style,Style CI,Style StdDev,Style StdErr,Average,Average CI,Average StdDev,Average StdErr
 claude-3-5-sonnet,1Pass,7.00,nan,0.00,0.00,8.00,nan,0.00,0.00,8.00,nan,0.00,0.00,9.12,0.23,0.30,0.10,8.03,0.06,0.07,0.02
+claude-3-5-sonnet,MoA 1,7.12,0.30,0.40,0.13,8.00,nan,0.00,0.00,8.25,0.35,0.46,0.15,9.00,nan,0.00,0.00,8.09,0.13,0.17,0.06
+claude-3-5-sonnet,MoA 2,7.25,0.35,0.46,0.15,8.00,nan,0.00,0.00,8.38,0.37,0.49,0.16,9.00,nan,0.00,0.00,8.16,0.17,0.23,0.07
+claude-3-5-sonnet,MoA 3,7.50,0.37,0.49,0.16,8.00,nan,0.00,0.00,8.50,0.37,0.49,0.16,9.00,nan,0.00,0.00,8.25,0.18,0.24,0.08
+claude-3-5-sonnet,MoA 4,7.50,0.37,0.49,0.16,8.12,0.23,0.30,0.10,8.50,0.37,0.49,0.16,9.00,nan,0.00,0.00,8.28,0.21,0.27,0.09
+claude-3-5-sonnet,MoA 5,7.25,0.35,0.46,0.15,8.00,nan,0.00,0.00,8.38,0.37,0.49,0.16,9.00,nan,0.00,0.00,8.16,0.17,0.23,0.07
+claude-3-5-sonnet,MoA 6,7.50,0.37,0.49,0.16,8.12,0.23,0.30,0.10,8.50,0.37,0.49,0.16,9.00,nan,0.00,0.00,8.28,0.21,0.28,0.09
+claude-3-5-sonnet,MoA 7,7.62,0.35,0.46,0.15,8.12,0.23,0.30,0.10,8.62,0.35,0.46,0.15,9.00,nan,0.00,0.00,8.34,0.19,0.26,0.09
+claude-3-5-sonnet,MoA 8,7.75,0.30,0.40,0.13,8.00,nan,0.00,0.00,8.62,0.37,0.49,0.16,9.00,nan,0.00,0.00,8.34,0.15,0.20,0.07

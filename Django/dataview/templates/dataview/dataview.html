@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block head %}
+<meta charset="UTF-8">
+<title>Data View</title>
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/dataview.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="dataview-container">
+    <h1>Data View</h1>
+    <p>This is the data view template.</p>
+    <div id="data-display">
+        <!-- Data will be displayed here -->
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- <script src="{% static 'js/dataview.js' %}"></script> -->
+{% endblock %}
