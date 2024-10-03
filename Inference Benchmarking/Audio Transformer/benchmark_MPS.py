@@ -53,7 +53,7 @@ st = time.time()
 device = "mps"
 precision = torch.float32
 model = AudioClassificationTransformer(num_classes=5)
-model.load_state_dict(torch.load("AudioClassifier.pt"))
+model.load_state_dict(torch.load("AudioTransformer.pt"))
 model = model.to(device, dtype=precision)
 
 en = time.time()

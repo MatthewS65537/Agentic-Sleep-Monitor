@@ -39,7 +39,7 @@ if __name__ == "__main__":
             camera_idx = 0
             break
     
-    save_dir = "../../data/images"
+    save_dir = "../../data/vision"
     interval = 1
     ensure_dir(save_dir)
     cap = cv2.VideoCapture(camera_idx)

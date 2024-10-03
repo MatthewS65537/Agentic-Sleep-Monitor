@@ -46,7 +46,7 @@ if __name__ == "__main__":
 
     audio_engine = AudioEngine(
         platform=args.engine,
-        model_name="AudioClassificationTransformer",
+        model_name="AudioTransformer",
     )
 
     # Create results directory if it doesn't exist

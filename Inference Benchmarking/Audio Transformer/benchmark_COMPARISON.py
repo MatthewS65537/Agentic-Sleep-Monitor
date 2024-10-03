@@ -50,14 +50,14 @@ class PositionalEncoding(nn.Module):
         x = x + self.pe[:x.size(0), :]
         return self.dropout(x)
 
-model_ANE = ct.models.MLModel('AudioClassificationTransformer.mlpackage')
+model_ANE = ct.models.MLModel('AudioTransformer.mlpackage')
 
 precision = torch.float32
 
 model_CPU = AudioClassificationTransformer(num_classes=5)
 model_MPS = AudioClassificationTransformer(num_classes=5)
-model_CPU.load_state_dict(torch.load("AudioClassifier.pt"))
-model_MPS.load_state_dict(torch.load("AudioClassifier.pt"))
+model_CPU.load_state_dict(torch.load("AudioTransformer.pt"))
+model_MPS.load_state_dict(torch.load("AudioTransformer.pt"))
 model_CPU = model_CPU.to("cpu", dtype=precision)
 model_MPS = model_MPS.to("mps", dtype=precision)
 model_CPU.eval()

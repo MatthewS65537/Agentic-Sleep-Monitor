@@ -53,7 +53,7 @@ precision = torch.float32
 # Load the model
 num_classes = 5  # Adjust this based on your specific use case
 model_CPU = AudioClassificationTransformer(num_classes)
-model_CPU.load_state_dict(torch.load("AudioClassifier.pt"))
+model_CPU.load_state_dict(torch.load("AudioTransformer.pt"))
 model_CPU = model_CPU.to("cpu", dtype=precision)
 model_CPU.eval()
 
@@ -65,7 +65,7 @@ model_ANE = ct.convert(
     convert_to="mlprogram",
     inputs=[ct.TensorType(shape=test_input.shape)],
 )
-model_ANE.save("AudioClassificationTransformer.mlpackage")
+model_ANE.save("AudioTransformer.mlpackage")
 # model_ANE = ct.models.MLModel("AudioClassificationTransformer.mlpackage")
 
 # # Create a dataset for benchmarking

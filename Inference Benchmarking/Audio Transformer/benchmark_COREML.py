@@ -5,7 +5,7 @@ import time
 
 st = time.time()
 
-model = ct.models.MLModel('AudioClassificationTransformer.mlpackage')
+model = ct.models.MLModel('AudioTransformer.mlpackage')
 
 en = time.time()
 
