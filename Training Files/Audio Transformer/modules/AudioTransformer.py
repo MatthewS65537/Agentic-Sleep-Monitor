@@ -6,7 +6,6 @@ import torch.nn as nn
 import torch.optim as optim
 import pytorch_lightning as pl
 import torchmetrics
-
 class AudioClassificationTransformer(nn.Module):
     def __init__(self, num_classes, d_model=512, nhead=16, num_layers=6, dim_feedforward=1024, dropout=0.25):
         super(AudioClassificationTransformer, self).__init__()
@@ -25,6 +24,7 @@ class AudioClassificationTransformer(nn.Module):
         self.classifier = nn.Linear(d_model, num_classes)
 
     def forward(self, x):
+        x = x.clone()
         x = x.permute(2, 0, 1)
         x = self.input_projection(x)
         x = self.pos_encoder(x)
@@ -44,7 +44,7 @@ class PositionalEncoding(nn.Module):
         pe[:, 0::2] = torch.sin(position * div_term)
         pe[:, 1::2] = torch.cos(position * div_term)
         pe = pe.unsqueeze(0).transpose(0, 1)
-        self.register_buffer('pe', pe)
+        self.register_parameter('pe', nn.Parameter(pe, requires_grad=False))
 
     def forward(self, x):
         x = x + self.pe[:x.size(0), :]
@@ -115,7 +115,7 @@ class AudioTransformer(pl.LightningModule):
     def training_step(self, batch, batch_idx):
         x, y = batch
         y_hat = self(x)
-        y = y.type(torch.int64)
+        y = y.long()
         loss = self.criterion(y_hat, y)
 
         if self.is_grokfastema_active():
@@ -125,8 +125,7 @@ class AudioTransformer(pl.LightningModule):
             # Update parameters
             self.optimizers().step()
             self.optimizers().zero_grad()
-        else:
-            # Standard optimization
+        elif self.grokking_mode == "DelayedGrokFastEMA":
             self.manual_backward(loss)
             self.optimizers().step()
             self.optimizers().zero_grad()
@@ -139,11 +138,11 @@ class AudioTransformer(pl.LightningModule):
         self.train_f1(y_hat, y)
 
         # Log metrics
-        self.log('train/loss', self.train_loss.compute(), on_step=False, on_epoch=True, prog_bar=True)
-        self.log('train/accuracy', self.train_accuracy.compute(), on_step=False, on_epoch=True, prog_bar=True)
-        self.log('train/precision', self.train_precision.compute(), on_step=False, on_epoch=True, prog_bar=True)
-        self.log('train/recall', self.train_recall.compute(), on_step=False, on_epoch=True, prog_bar=True)
-        self.log('train/f1', self.train_f1.compute(), on_step=False, on_epoch=True, prog_bar=True)
+        self.log('train/loss', self.train_loss.compute(), on_step=False, on_epoch=True, prog_bar=False, sync_dist=True)
+        self.log('train/accuracy', self.train_accuracy.compute(), on_step=False, on_epoch=True, prog_bar=True, sync_dist=True)
+        self.log('train/precision', self.train_precision.compute(), on_step=False, on_epoch=True, prog_bar=False, sync_dist=True)
+        self.log('train/recall', self.train_recall.compute(), on_step=False, on_epoch=True, prog_bar=False, sync_dist=True)
+        self.log('train/f1', self.train_f1.compute(), on_step=False, on_epoch=True, prog_bar=False, sync_dist=True)
 
         return loss
 
@@ -158,7 +157,7 @@ class AudioTransformer(pl.LightningModule):
         if dataloader_idx == 0:
             x, y = batch
             y_hat = self(x)
-            y = y.type(torch.int64)
+            y = y.long()
             loss = self.criterion(y_hat, y)
 
             self.val_loss(loss)
@@ -168,11 +167,11 @@ class AudioTransformer(pl.LightningModule):
             self.val_f1(y_hat, y)
 
             # Log metrics
-            self.log('val/loss', self.val_loss.compute(), on_step=False, on_epoch=True, prog_bar=True, add_dataloader_idx=False)
-            self.log('val/accuracy', self.val_accuracy.compute(), on_step=False, on_epoch=True, prog_bar=True, add_dataloader_idx=False)
-            self.log('val/precision', self.val_precision.compute(), on_step=False, on_epoch=True, prog_bar=True, add_dataloader_idx=False)
-            self.log('val/recall', self.val_recall.compute(), on_step=False, on_epoch=True, prog_bar=True, add_dataloader_idx=False)
-            self.log('val/f1', self.val_f1.compute(), on_step=False, on_epoch=True, prog_bar=True, add_dataloader_idx=False)
+            self.log('val/loss', self.val_loss.compute(), on_step=False, on_epoch=True, prog_bar=False, add_dataloader_idx=False, sync_dist=True)
+            self.log('val/accuracy', self.val_accuracy.compute(), on_step=False, on_epoch=True, prog_bar=True, add_dataloader_idx=False, sync_dist=True)
+            self.log('val/precision', self.val_precision.compute(), on_step=False, on_epoch=True, prog_bar=False, add_dataloader_idx=False, sync_dist=True)
+            self.log('val/recall', self.val_recall.compute(), on_step=False, on_epoch=True, prog_bar=False, add_dataloader_idx=False, sync_dist=True)
+            self.log('val/f1', self.val_f1.compute(), on_step=False, on_epoch=True, prog_bar=False, add_dataloader_idx=False, sync_dist=True)
 
         elif dataloader_idx == 1:
             x, y = batch
@@ -187,11 +186,11 @@ class AudioTransformer(pl.LightningModule):
             self.test_f1(y_hat, y)
 
             # Log Metrics
-            self.log('test/loss', self.test_loss.compute(), on_step=False, on_epoch=True, prog_bar=True, add_dataloader_idx=False)
-            self.log('test/accuracy', self.test_accuracy.compute(), on_step=False, on_epoch=True, prog_bar=True, add_dataloader_idx=False)
-            self.log('test/precision', self.test_precision.compute(), on_step=False, on_epoch=True, prog_bar=True, add_dataloader_idx=False)
-            self.log('test/recall', self.test_recall.compute(), on_step=False, on_epoch=True, prog_bar=True, add_dataloader_idx=False)
-            self.log('test/f1', self.test_f1.compute(), on_step=False, on_epoch=True, prog_bar=True, add_dataloader_idx=False)
+            self.log('test/loss', self.test_loss.compute(), on_step=False, on_epoch=True, prog_bar=False, add_dataloader_idx=False, sync_dist=True)
+            self.log('test/accuracy', self.test_accuracy.compute(), on_step=False, on_epoch=True, prog_bar=True, add_dataloader_idx=False, sync_dist=True)
+            self.log('test/precision', self.test_precision.compute(), on_step=False, on_epoch=True, prog_bar=False, add_dataloader_idx=False, sync_dist=True)
+            self.log('test/recall', self.test_recall.compute(), on_step=False, on_epoch=True, prog_bar=False, add_dataloader_idx=False, sync_dist=True)
+            self.log('test/f1', self.test_f1.compute(), on_step=False, on_epoch=True, prog_bar=False, add_dataloader_idx=False, sync_dist=True)
 
         return loss
 

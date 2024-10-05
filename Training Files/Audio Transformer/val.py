@@ -1,8 +1,7 @@
 import pytorch_lightning as pl
 import torch
-from modules.AudioTransformer import *
-from modules.Dataset import *
-from modules.NeptuneExtra import *
+from modules.AudioTransformer import AudioTransformer
+from modules.Dataset import MFCCDataset, AudioDataModule
 from torch.utils.data import DataLoader
 
 # Load data
@@ -26,7 +25,7 @@ torch.cuda.manual_seed_all(42)
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
 
-# Define hyperparameters
+# Define hyperparameters (same as in train.py)
 hparams = {
     "grokking": "None",
     "learning_rate": 3e-4,
@@ -45,29 +44,9 @@ hparams = {
     "hardware" : "4 x RTX 4090"
 }
 
-import neptune
-from pytorch_lightning.loggers import NeptuneLogger
-import os
-
-neptune_api_token=os.getenv('NEPTUNE_API_KEY')
-
-if not (neptune_api_token == "" or neptune_api_token is None):
-    print("[INFO] Neptune Logger Initialized")
-    neptune_logger = NeptuneLogger(
-        api_key=neptune_api_token,
-        project="matthews65537/Le-Monitor",
-        name="Audio Transformer",
-        tags=["Audio", "Tuned Parameters", "DDP 4 x RTX 4090", "Final"],
-    )
-
-    neptune_logger.log_hyperparams(hparams)
-else:
-    print("[INFO] NEPTUNE_API_KEY not set. Skipping Neptune Logger.")
-
-torch.manual_seed(42)
-
-# Create model
-model = AudioTransformer(hparams)
+# Load the trained model
+model = AudioTransformer.load_from_checkpoint("Checkpoint.ckpt", hparams=hparams)
+model.eval()
 
 # Prepare datasets and data module
 bsz = hparams["bsz"]
@@ -76,18 +55,11 @@ dev_dataset = MFCCDataset(X_dev, y_dev)
 test_dataset = MFCCDataset(X_test, y_test)
 data_module = AudioDataModule(train_dataset, dev_dataset, test_dataset, batch_size=bsz)
 
-# Common trainer arguments
+# GPU-specific settings
 trainer_args = {
-    "max_epochs": 300,
-    "log_every_n_steps": 1,
     "precision": hparams["precision"],
 }
 
-# Neptune logger and callback
-if neptune_api_token is not None and neptune_api_token != "":
-    trainer_args["logger"] = neptune_logger
-
-# GPU-specific settings
 if torch.cuda.is_available():
     torch.set_float32_matmul_precision('medium')
     if torch.cuda.device_count() > 1:
@@ -99,6 +71,12 @@ if torch.cuda.is_available():
 # Create the trainer
 trainer = pl.Trainer(**trainer_args, deterministic=True)
 
-trainer.fit(model, datamodule=data_module)
+# Perform validation on all splits
+print("Validating on training set:")
+trainer.validate(model, dataloaders=DataLoader(train_dataset, batch_size=bsz))
 
-neptune_logger.experiment.stop()
+print("\nValidating on development set:")
+trainer.validate(model, dataloaders=DataLoader(dev_dataset, batch_size=bsz))
+
+print("\nValidating on test set:")
+trainer.validate(model, dataloaders=DataLoader(test_dataset, batch_size=bsz))

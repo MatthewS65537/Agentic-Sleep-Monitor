@@ -1,3 +1,5 @@
+print("[WARNING] NOT TESTED ON DDP!")
+
 import pytorch_lightning as pl
 import torch
 from modules.AudioTransformer import *
