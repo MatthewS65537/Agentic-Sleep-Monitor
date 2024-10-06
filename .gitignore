@@ -24,3 +24,10 @@ Inference Benchmarking/Audio Transformer/AudioTransformer.mlpackage
 Inference Benchmarking/Audio Transformer/AudioTransformer.ckpt
 Inference Benchmarking/Audio Transformer/AudioTransformer.pt
 Training Files/Audio Transformer/out.txt
+Training Files/Audio Transformer.zip
+Training Files/Vision Transformer.zip
+Training Files/Vision CNN/Checkpoint_MPS.ckpt
+Training Files/Vision CNN/raw_data
+Training Files/Vision CNN/Checkpoint_CPU.ckpt
+Training Files/Vision CNN/lightning_logs
+Training Files/Vision CNN/data

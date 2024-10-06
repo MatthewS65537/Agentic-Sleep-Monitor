@@ -37,7 +37,7 @@ class PositionalEncoding(nn.Module):
         pe[:, 0::2] = torch.sin(position * div_term)
         pe[:, 1::2] = torch.cos(position * div_term)
         pe = pe.unsqueeze(0).transpose(0, 1)
-        self.register_buffer('pe', pe)
+        self.register_parameter('pe', nn.Parameter(pe, requires_grad=False))
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         x = x + self.pe[:x.size(0), :]
@@ -86,10 +86,6 @@ class ViT(nn.Module):
         x = self.fc(x)
         return x
 
-    def count_params(self) -> float:
-        """Count the number of trainable parameters in millions."""
-        return sum(p.numel() for p in self.parameters() if p.requires_grad) / 1e6
-
 
 def gradfilter_ema(
     m: nn.Module,
@@ -97,7 +93,6 @@ def gradfilter_ema(
     alpha: float = 0.98,
     lamb: float = 2.0,
 ) -> Dict[str, torch.Tensor]:
-    """Apply Exponential Moving Average (EMA) to gradients."""
     if grads is None:
         grads = {n: p.grad.data.detach() for n, p in m.named_parameters() if p.requires_grad}
 
@@ -128,56 +123,69 @@ class ViTLightning(pl.LightningModule):
         )
         self.criterion = nn.CrossEntropyLoss()
 
-        if self.hparams.get("grokking") == "GrokFastEMA":
+        self.grokking_mode = self.hparams.get("grokking", None)
+        if self.grokking_mode in ["GrokFastEMA", "DelayedGrokFastEMA"]:
             self.automatic_optimization = False
+            self.grads = None
         
+        if self.grokking_mode == "DelayedGrokFastEMA":
+            self.delay_epoch = self.hparams.get("delay_epoch", 0)
+
         # Metrics for training
-        self.train_accuracy = torchmetrics.Accuracy(task="multiclass", num_classes=self.hparams.num_classes)
-        self.train_precision = torchmetrics.Precision(task="multiclass", num_classes=self.hparams.num_classes)
-        self.train_recall = torchmetrics.Recall(task="multiclass", num_classes=self.hparams.num_classes)
-        self.train_f1 = torchmetrics.F1Score(task="multiclass", num_classes=self.hparams.num_classes)
+        self.train_accuracy = torchmetrics.classification.Accuracy(task="multiclass", average="weighted", num_classes=self.hparams.num_classes)
+        self.train_precision = torchmetrics.classification.Precision(task="multiclass", average="weighted", num_classes=self.hparams.num_classes)
+        self.train_recall = torchmetrics.classification.Recall(task="multiclass", average="weighted", num_classes=self.hparams.num_classes)
+        self.train_f1 = torchmetrics.classification.F1Score(task="multiclass", average="weighted", num_classes=self.hparams.num_classes)
         self.train_loss = torchmetrics.MeanMetric()
 
         # Metrics for validation
-        self.val_accuracy = torchmetrics.Accuracy(task="multiclass", num_classes=self.hparams.num_classes)
-        self.val_precision = torchmetrics.Precision(task="multiclass", num_classes=self.hparams.num_classes)
-        self.val_recall = torchmetrics.Recall(task="multiclass", num_classes=self.hparams.num_classes)
-        self.val_f1 = torchmetrics.F1Score(task="multiclass", num_classes=self.hparams.num_classes)
+        self.val_accuracy = torchmetrics.classification.Accuracy(task="multiclass", average="weighted", num_classes=self.hparams.num_classes)
+        self.val_precision = torchmetrics.classification.Precision(task="multiclass", average="weighted", num_classes=self.hparams.num_classes)
+        self.val_recall = torchmetrics.classification.Recall(task="multiclass", average="weighted", num_classes=self.hparams.num_classes)
+        self.val_f1 = torchmetrics.classification.F1Score(task="multiclass", average="weighted", num_classes=self.hparams.num_classes)
         self.val_loss = torchmetrics.MeanMetric()
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+    def forward(self, x):
         return self.model(x)
+
+    def is_grokfastema_active(self):
+        if self.grokking_mode == "GrokFastEMA":
+            return True
+        elif self.grokking_mode == "DelayedGrokFastEMA":
+            return self.current_epoch >= self.delay_epoch
+        return False
 
     def training_step(self, batch, batch_idx):
         x, y = batch
         y_hat = self(x)
-        y = y.type(torch.int64)
+        y = y.long()
         loss = self.criterion(y_hat, y)
 
-        # Apply gradient modification if grokking is set to "GrokFastEMA"
-        if self.hparams.get("grokking") == "GrokFastEMA":
+        if self.is_grokfastema_active():
             self.manual_backward(loss)
-            if not hasattr(self, "grads"):
-                self.grads = None
-            self.grads = gradfilter_ema(self.model, grads=self.grads)
-            
+            self.grads = gradfilter_ema(self.model, grads=self.grads, alpha=self.hparams.alpha, lamb=self.hparams.lamb)
+
             # Update parameters
             self.optimizers().step()
             self.optimizers().zero_grad()
+        elif self.grokking_mode == "DelayedGrokFastEMA":
+            self.manual_backward(loss)
+            self.optimizers().step()
+            self.optimizers().zero_grad()
 
-        # Metrics update and logging
+        # Update metrics
         self.train_loss(loss)
         self.train_accuracy(y_hat, y)
         self.train_precision(y_hat, y)
         self.train_recall(y_hat, y)
         self.train_f1(y_hat, y)
-        
-        # Log Metrics
-        self.log('train/loss', self.train_loss.compute(), on_step=False, on_epoch=True, prog_bar=True)
-        self.log('train/accuracy', self.train_accuracy.compute(), on_step=False, on_epoch=True, prog_bar=True)
-        self.log('train/precision', self.train_precision.compute(), on_step=False, on_epoch=True, prog_bar=True)
-        self.log('train/recall', self.train_recall.compute(), on_step=False, on_epoch=True, prog_bar=True)
-        self.log('train/f1', self.train_f1.compute(), on_step=False, on_epoch=True, prog_bar=True)
+
+        # Log metrics
+        self.log('train/loss', self.train_loss.compute(), on_step=False, on_epoch=True, prog_bar=False, sync_dist=True)
+        self.log('train/accuracy', self.train_accuracy.compute(), on_step=False, on_epoch=True, prog_bar=True, sync_dist=True)
+        self.log('train/precision', self.train_precision.compute(), on_step=False, on_epoch=True, prog_bar=False, sync_dist=True)
+        self.log('train/recall', self.train_recall.compute(), on_step=False, on_epoch=True, prog_bar=False, sync_dist=True)
+        self.log('train/f1', self.train_f1.compute(), on_step=False, on_epoch=True, prog_bar=False, sync_dist=True)
 
         return loss
 
@@ -191,7 +199,7 @@ class ViTLightning(pl.LightningModule):
     def validation_step(self, batch, batch_idx):
         x, y = batch
         y_hat = self(x)
-        y = y.type(torch.int64)
+        y = y.long()
         loss = self.criterion(y_hat, y)
 
         self.val_loss(loss)
@@ -199,11 +207,13 @@ class ViTLightning(pl.LightningModule):
         self.val_precision(y_hat, y)
         self.val_recall(y_hat, y)
         self.val_f1(y_hat, y)
-        self.log('val/loss', self.val_loss.compute(), on_step=False, on_epoch=True, prog_bar=True)
-        self.log('val/accuracy', self.val_accuracy.compute(), on_step=False, on_epoch=True, prog_bar=True)
-        self.log('val/precision', self.val_precision.compute(), on_step=False, on_epoch=True, prog_bar=True)
-        self.log('val/recall', self.val_recall.compute(), on_step=False, on_epoch=True, prog_bar=True)
-        self.log('val/f1', self.val_f1.compute(), on_step=False, on_epoch=True, prog_bar=True)
+
+        # Log metrics
+        self.log('val/loss', self.val_loss.compute(), on_step=False, on_epoch=True, prog_bar=False, sync_dist=True)
+        self.log('val/accuracy', self.val_accuracy.compute(), on_step=False, on_epoch=True, prog_bar=True, sync_dist=True)
+        self.log('val/precision', self.val_precision.compute(), on_step=False, on_epoch=True, prog_bar=False, sync_dist=True)
+        self.log('val/recall', self.val_recall.compute(), on_step=False, on_epoch=True, prog_bar=False, sync_dist=True)
+        self.log('val/f1', self.val_f1.compute(), on_step=False, on_epoch=True, prog_bar=False, sync_dist=True)
 
         return loss
 
@@ -215,19 +225,21 @@ class ViTLightning(pl.LightningModule):
         self.val_f1.reset()
 
     def configure_optimizers(self):
-        optimizer = optim.AdamW(self.parameters(), lr=self.hparams.learning_rate)
-        scheduler = optim.lr_scheduler.ReduceLROnPlateau(
+        optimizer = optim.AdamW(
+            self.model.parameters(),
+            lr=self.hparams.learning_rate,
+            weight_decay=self.hparams.weight_decay,
+            betas=(self.hparams.beta_1, self.hparams.beta_2)
+        )
+        scheduler = optim.lr_scheduler.StepLR(
             optimizer,
-            mode='max',
-            factor=self.hparams.scheduler_factor,
-            patience=self.hparams.scheduler_patience,
-            min_lr=self.hparams.min_lr
+            step_size=self.hparams.scheduler_step_size,
+            gamma=self.hparams.scheduler_gamma
         )
         return {
             'optimizer': optimizer,
             'lr_scheduler': {
                 'scheduler': scheduler,
-                'monitor': 'val/accuracy',
                 'interval': 'epoch',
                 'frequency': 1
             }

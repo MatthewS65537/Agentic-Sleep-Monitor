@@ -6,10 +6,10 @@ from torch.utils.data import DataLoader
 import optuna
 
 # Load data with weights_only=True to address the FutureWarning
-X_train = torch.load("./data/X_train.pt", weights_only=True)
-y_train = torch.load("./data/y_train.pt", weights_only=True)
-X_test = torch.load("./data/X_test.pt", weights_only=True)
-y_test = torch.load("./data/y_test.pt", weights_only=True)
+X_train = torch.load("./data/images_train.pt", weights_only=True)
+y_train = torch.load("./data/labels_train.pt", weights_only=True)
+X_test = torch.load("./data/images_test.pt", weights_only=True)
+y_test = torch.load("./data/labels_test.pt", weights_only=True)
 
 def objective(trial: optuna.trial.Trial) -> float:
     torch.manual_seed(42)
@@ -30,11 +30,13 @@ def objective(trial: optuna.trial.Trial) -> float:
         'dropout': 0.25,
         'precision': '16-mixed',
         'learning_rate': trial.suggest_float('learning_rate', 1e-6, 1e-3, log=True),
-        'scheduler' : 'ReduceLROnPlateau',
-        'scheduler_factor': trial.suggest_float('scheduler_factor', 0.1, 0.8),
-        'scheduler_patience': trial.suggest_int('scheduler_patience', 2, 10),
-        'bsz' : 256,
-        'min_lr': trial.suggest_float('min_lr', 1e-6, 1e-3, log=True),
+        'scheduler' : 'Exponential Decay',
+        'scheduler_step_size': trial.suggest_int('scheduler_step_size', 1, 20),
+        'scheduler_gamma': trial.suggest_float('scheduler_gamma', 0.1, 0.99),
+        'weight_decay': trial.suggest_float('weight_decay', 1e-6, 1e-3, log=True),
+        'beta_1': trial.suggest_float('beta_1', 0.8, 0.99),
+        'beta_2': trial.suggest_float('beta_2', 0.85, 0.999),
+        'bsz' : 4, # 16, technically
         'grokking': 'None',
     }
 
@@ -47,7 +49,7 @@ def objective(trial: optuna.trial.Trial) -> float:
         logger=True,
         enable_checkpointing=False,
         enable_progress_bar=False,
-        max_epochs=20,
+        max_epochs=100,
         precision=hparams['precision'],
     )
     trainer.fit(model, train_loader, val_loader)
