@@ -10,6 +10,7 @@ models = [
     ("qwen2.5_3b-instruct", "Qwen 2.5 3B Instruct", "./gdrive_results", True),
     ("qwen2.5_7b-instruct", "Qwen 2.5 7B Instruct", "./gdrive_results", True),
     ("qwen2.5_14b-instruct", "Qwen 2.5 14B Instruct", "./gdrive_results", True),
+    ("qwen2.5_32b-instruct", "Qwen 2.5 32B Instruct", "./gdrive_results", True),
     ("gemma2_2b", "Gemma 2 2B Instruct", "./gdrive_results", True),
     ("llama3.2_1b-instruct-q4_0", "Llama 3.2 1B Instruct", "./gdrive_results", True),
     ("llama3.2_3b-instruct-q4_0", "Llama 3.2 3B Instruct", "./gdrive_results", True),

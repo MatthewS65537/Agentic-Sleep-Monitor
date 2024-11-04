@@ -42,7 +42,11 @@ def objective(trial: optuna.trial.Trial) -> float:
         "weight_decay" : trial.suggest_float('weight_decay', 1e-5, 0.1, log=True),
         "beta_1" : trial.suggest_float('beta_1', 0.7, 0.9),
         "beta_2" : trial.suggest_float('beta_2', 0.8, 0.999),
-        "bsz" : 256
+        "bsz" : 256,
+        "grokking_mode" : trial.suggest_categorical('grokking_mode', ["None", "GrokFastEMA", "DelayedGrokFastEMA"]),
+        "alpha" : trial.suggest_float('alpha', 0.8, 0.99),
+        "lamb" : trial.suggest_float('lamb', 1.0, 5.0),
+        "delay_epoch" : trial.suggest_int('delay_epoch', 0, 100)
     }
 
     model = AudioTransformer(hparams)

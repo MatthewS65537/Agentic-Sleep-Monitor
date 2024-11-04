@@ -41,7 +41,7 @@ hparams = {
     "weight_decay": 0.003,
     "beta_1": 0.84,
     "beta_2": 0.86,
-    "bsz": 64,
+    "bsz": 64, # 4 * 64 = 256
     "hardware" : "4 x RTX 4090"
 }
 
